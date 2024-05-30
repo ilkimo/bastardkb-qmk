@@ -21,6 +21,7 @@ enum charybdis_keymap_layers {
     LAYER_ARROWS,
     LAYER_NUMBERS,
     LAYER_SYMBOLS,
+    LAYER_MOUSE,
     LAYER_NAVIGATION,
 };
 
@@ -37,11 +38,15 @@ enum charybdis_keymap_layers {
 #define KSFT_I MT(MOD_LSFT,KC_I)
 #define KCTL_O MT(MOD_LCTL,KC_O)
 #define KSUS_3 MT(MOD_LCTL,KC_COMM)
-#define L2_X LT(2,KC_X)
-#define L1_C LT(1,KC_C)
-#define L4_D LT(4,KC_D)
-#define L6_V LT(6,KC_V)
+#define L1_X LT(1,KC_X)
+#define L2_C LT(2,KC_C)
+#define L3_D LT(3,KC_D)
+#define L5_V LT(5,KC_V)
 #define L3_LSH LT(3,KC_SLSH)
+#define M_CTL MOD_LCTL
+#define M_SFT MOD_LSFT
+#define M_ALT MOD_LALT
+#define M_GUI MOD_LGUI
 
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -53,7 +58,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
       XXXXXXX,  KCTL_A,  KSFT_R,  KALT_S,  KGUI_T,    KC_G,       KC_M,  KGUI_N,  KALT_E,  KSFT_I,  KCTL_O, XXXXXXX,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-      XXXXXXX,    KC_Z,    L2_X,    L1_C,    L4_D,    L6_V,       KC_K,    KC_H,  KSUS_3,  KC_DOT,  L3_LSH, XXXXXXX,
+      XXXXXXX,    KC_Z,    L1_X,    L2_C,    L3_D,    L5_V,       KC_K,    KC_H,  KSUS_3,  KC_DOT,  L3_LSH, XXXXXXX,
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
                                    KC_SPC, KC_BSPC, XXXXXXX,      MOD_RSFT, KC_ENT,
                                            KC_ESC, XXXXXXX,       QK_REPEAT_KEY
@@ -81,7 +86,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX,    KC_7,    KC_8,    KC_9, XXXXXXX, XXXXXXX,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX,    KC_4,    KC_5,    KC_6, XXXXXXX, XXXXXXX,
+       XXXXXXX,   M_CTL,   M_SFT,   M_ALT,   M_GUI, XXXXXXX,    XXXXXXX,    KC_4,    KC_5,    KC_6, XXXXXXX, XXXXXXX,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX,    KC_1,    KC_2,    KC_3, XXXXXXX, XXXXXXX,
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
@@ -91,6 +96,21 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 
   [LAYER_SYMBOLS] = LAYOUT(
+  // ╭──────────────────────────────────────────────────────╮ ╭──────────────────────────────────────────────────────╮
+       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
+       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
+       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
+       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
+                                  XXXXXXX, XXXXXXX, _______,    XXXXXXX, _______,
+                                           XXXXXXX, XXXXXXX,    XXXXXXX
+  //                            ╰───────────────────────────╯ ╰──────────────────╯
+  ),
+
+  [LAYER_MOUSE] = LAYOUT(
   // ╭──────────────────────────────────────────────────────╮ ╭──────────────────────────────────────────────────────╮
        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
