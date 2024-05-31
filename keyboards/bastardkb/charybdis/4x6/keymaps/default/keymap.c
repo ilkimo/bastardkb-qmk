@@ -143,19 +143,36 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 };
 
 uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
-    if (mods == 0) {  // No modifier
-        switch (keycode) {
-            case KC_U: return C(KC_R);  // 'u' sends Ctrl + r. This is for the vim undo
+    bool shifted = (mods & MOD_MASK_SHIFT);  // Was Shift held?
+    bool controlled = (mods & MOD_MASK_CTRL);  // Was Shift held?
+
+    switch(keycode) {
+    case KC_U: return C(KC_R);  // 'u' maps Ctrl + r. This is for the vim undo-redo
+    case KC_TAB:
+            if(shifted) {
+                return KC_TAB;
+            } else {
+                return S(KC_TAB);
+            }
+    case KC_R:
+            if(controlled) {
+                return KC_U; // Ctrl+'r' maps to 'u'. This is for the vim undo-redo
+            } else {
+                return KC_TRNS;
+            }
+    case KC_Y:
+        if(controlled) {
+            return C(KC_Z);
+        } else {
+            return KC_TRNS;
         }
-    } else if ((mods & MOD_MASK_CTRL)) {  // Was Ctrl held?
-        switch (keycode) {
-            case KC_R: return KC_U;  // Ctrl + r sends 'u'. This is for the vim redo
-            case KC_Y: return C(KC_Z);  // Ctrl + Y reverses to Ctrl + Z.
-            case KC_Z: return C(KC_Y);  // Ctrl + Z reverses to Ctrl + Y.
+    case KC_Z:
+        if(controlled) {
+            return C(KC_Y);
+        } else {
+            return KC_TRNS;
         }
+    default: return KC_TRNS;  // Defer to default definitions.
     }
-
-    return KC_TRNS;  // Defer to default definitions.
 }
-
 // clang-format on
