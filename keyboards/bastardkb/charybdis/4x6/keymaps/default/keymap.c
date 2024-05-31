@@ -77,7 +77,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
        RM_PREV, XXXXXXX, XXXXXXX, XXXXXXX, EE_CLR,  QK_BOOT,    KC_PAST,   KC_P1,   KC_P2,   KC_P3, KC_PSLS, KC_PDOT,
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
                                   _______,  KC_DEL, _______,    _______, _______,
-                                             TO(0), _______,    _______
+                                             TO(0), _______,    QK_AREP
   //                            ╰───────────────────────────╯ ╰──────────────────╯
   ),
 
@@ -141,4 +141,21 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //                            ╰───────────────────────────╯ ╰──────────────────╯
   ),
 };
+
+uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
+    if (mods == 0) {  // No modifier
+        switch (keycode) {
+            case KC_U: return C(KC_R);  // 'u' sends Ctrl + r. This is for the vim undo
+        }
+    } else if ((mods & MOD_MASK_CTRL)) {  // Was Ctrl held?
+        switch (keycode) {
+            case KC_R: return KC_U;  // Ctrl + r sends 'u'. This is for the vim redo
+            case KC_Y: return C(KC_Z);  // Ctrl + Y reverses to Ctrl + Z.
+            case KC_Z: return C(KC_Y);  // Ctrl + Z reverses to Ctrl + Y.
+        }
+    }
+
+    return KC_TRNS;  // Defer to default definitions.
+}
+
 // clang-format on
