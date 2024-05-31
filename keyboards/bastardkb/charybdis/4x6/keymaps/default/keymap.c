@@ -23,7 +23,9 @@ enum charybdis_keymap_layers {
     LAYER_SYMBOLS,
     LAYER_MOUSE,
     LAYER_NAVIGATION,
-    LAYER_MINECRAFT
+    LAYER_MINECRAFT,
+    LAYER_EMOJI,
+    LAYER_ACCENTED_LETTERS
 };
 
 #define LOWER MO(LAYER_LOWER)
@@ -38,7 +40,6 @@ enum charybdis_keymap_layers {
 #define KALT_E MT(MOD_LALT,KC_E)
 #define KSFT_I MT(MOD_LSFT,KC_I)
 #define KCTL_O MT(MOD_LCTL,KC_O)
-#define KSUS_3 MT(MOD_LCTL,KC_COMM)
 #define L1_X LT(1,KC_X)
 #define L2_C LT(2,KC_C)
 #define L3_D LT(3,KC_D)
@@ -61,7 +62,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
       XXXXXXX,  KCTL_A,  KSFT_R,  KALT_S,  KGUI_T,    KC_G,       KC_M,  KGUI_N,  KALT_E,  KSFT_I,  KCTL_O, XXXXXXX,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-      XXXXXXX,    KC_Z,    L1_X,    L2_C,    L3_D,    L5_V,       KC_K,    KC_H,  KSUS_3,  KC_DOT,  L4_LSH, XXXXXXX,
+      XXXXXXX,    KC_Z,    L1_X,    L2_C,    L3_D,    L5_V,       KC_K,    KC_H, KC_COMM,  KC_DOT,  L4_LSH, XXXXXXX,
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
                                    KC_SPC,KC_BSPC, XXXXXXX,      M_SFT,  KC_ENT,
                                            KC_ESC, XXXXXXX,      QK_REPEAT_KEY
@@ -158,6 +159,35 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   //                            ╰───────────────────────────╯ ╰──────────────────╯
   ),
 
+  [LAYER_ACCENTED_LETTERS] = LAYOUT(
+  // ╭──────────────────────────────────────────────────────╮ ╭──────────────────────────────────────────────────────╮
+       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
+       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
+       XXXXXXX,    KC_A,    KC_C,    KC_C,    KC_E,    KC_N,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
+       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
+                                  _______, _______, _______,    _______, _______,
+                                             TO(0), _______,    _______
+  //                            ╰───────────────────────────╯ ╰──────────────────╯
+  ),
+
+  [LAYER_EMOJI] = LAYOUT(
+  // ╭──────────────────────────────────────────────────────╮ ╭──────────────────────────────────────────────────────╮
+       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
+       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
+       XXXXXXX,    KC_E,    KC_M,    KC_O,    KC_J,    KC_I,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
+       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
+                                  _______, _______, _______,    _______, _______,
+                                             TO(0), _______,    _______
+  //                            ╰───────────────────────────╯ ╰──────────────────╯
+  ),
 };
 
 // BEGIN ALT KEY MAPPINGS
@@ -200,8 +230,16 @@ uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
 
 // BEGIN COMBOS
 const uint16_t PROGMEM navigation_combo[] = {KC_G, KC_M, COMBO_END};
+const uint16_t PROGMEM accented_letters_combo[] = {KC_H, KC_COMM, COMBO_END};
+const uint16_t PROGMEM symbol_layer_shifted_combo[] = {KC_W, KC_F, COMBO_END};
+const uint16_t PROGMEM symbol_layer_combo[] = {KC_P, KC_F, COMBO_END};
+const uint16_t PROGMEM emoji_layer_combo[] = {KC_J, KC_L, COMBO_END};
 combo_t key_combos[] = {
     COMBO(navigation_combo, TO(LAYER_NAVIGATION)),
+    COMBO(accented_letters_combo, OSL(LAYER_ACCENTED_LETTERS)),
+    COMBO(symbol_layer_combo, OSL(LAYER_SYMBOLS)),
+    COMBO(symbol_layer_shifted_combo, OSL(LAYER_SYMBOLS)),
+    COMBO(emoji_layer_combo, TO(LAYER_EMOJI)),
 };
 // END COMBOS
 
