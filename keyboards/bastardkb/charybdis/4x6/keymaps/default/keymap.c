@@ -144,7 +144,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
     bool shifted = (mods & MOD_MASK_SHIFT);  // Was Shift held?
-    bool controlled = (mods & MOD_MASK_CTRL);  // Was Shift held?
+    bool controlled = (mods & MOD_MASK_CTRL);  // Was Control held?
+    //bool modded = (mods & MOD_MASK_GUI);  // Was Mod held?
+    //bool alted = (mods & MOD_MASK_ALT);  // Was Alt held?
 
     switch(keycode) {
     case KC_U: return C(KC_R);  // 'u' maps Ctrl + r. This is for the vim undo-redo
