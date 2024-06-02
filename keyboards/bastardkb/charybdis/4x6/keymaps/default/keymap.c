@@ -15,6 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 #include QMK_KEYBOARD_H
+#include "features/achordion.h"
 
 enum charybdis_keymap_layers {
     LAYER_BASE = 0,
@@ -238,9 +239,22 @@ combo_t key_combos[] = {
     COMBO(navigation_combo, TO(LAYER_NAVIGATION)),
     COMBO(accented_letters_combo, OSL(LAYER_ACCENTED_LETTERS)),
     COMBO(symbol_layer_combo, OSL(LAYER_SYMBOLS)),
-    COMBO(symbol_layer_shifted_combo, OSL(LAYER_SYMBOLS)),
+    COMBO(symbol_layer_shifted_combo, OSM(MOD_LSFT)),
     COMBO(emoji_layer_combo, TO(LAYER_EMOJI)),
 };
 // END COMBOS
+
+// BEGIN ACHORDION
+bool process_record_user(uint16_t keycode, keyrecord_t* record) {
+  if (!process_achordion(keycode, record)) { return false; }
+  // Your macros ...
+
+  return true;
+}
+
+void matrix_scan_user(void) {
+  achordion_task();
+}
+// END ACHORDION
 
 // clang-format on
