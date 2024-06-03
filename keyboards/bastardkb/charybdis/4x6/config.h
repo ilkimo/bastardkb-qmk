@@ -25,8 +25,8 @@
 #define MASTER_RIGHT
 
 // Kimo add
-#define TAPPING_TERM 200
-#define PERMISSIVE_HOLD // good with Achordion
+#define TAPPING_TERM 185
+//#define PERMISSIVE_HOLD // good with Achordion
 #define ACHORDION_STREAK
 
 // To use the handedness pin, resistors need to be installed on the adapter PCB.
