@@ -44,7 +44,6 @@ enum charybdis_keymap_layers {
 #define L1_X LT(1,KC_X)
 #define L2_C LT(2,KC_C)
 #define L3_D LT(3,KC_D)
-#define L5_V LT(5,KC_V)
 #define L4_LSH LT(4,KC_SLSH)
 #define M_CTL KC_LCTL
 #define M_SFT KC_LSFT
@@ -63,7 +62,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
       XXXXXXX,  KCTL_A,  KSFT_R,  KALT_S,  KGUI_T,    KC_G,       KC_M,  KGUI_N,  KALT_E,  KSFT_I,  KCTL_O, XXXXXXX,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-      XXXXXXX,    KC_Z,    L1_X,    L2_C,    L3_D,    L5_V,       KC_K,    KC_H, KC_COMM,  KC_DOT,  L4_LSH, XXXXXXX,
+      XXXXXXX,    KC_Z,    L1_X,    L2_C,    L3_D,    KC_V,       KC_K,    KC_H, KC_COMM,  KC_DOT,  L4_LSH, XXXXXXX,
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
                                    KC_SPC,KC_BSPC, XXXXXXX,      M_SFT,  KC_ENT,
                                            KC_ESC, XXXXXXX,      QK_REPEAT_KEY
@@ -252,8 +251,104 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
   return true;
 }
 
+bool achordion_chord(uint16_t tap_hold_keycode,
+                     keyrecord_t* tap_hold_record,
+                     uint16_t other_keycode,
+                     keyrecord_t* other_record) {
+    // Exceptionally consider the following chords as holds, even though they
+    // are on the same hand in Dvorak.
+    switch(tap_hold_keycode) {
+        case KCTL_A:
+        if(other_keycode == KC_Z
+            || other_keycode == L1_X
+            || other_keycode == L2_C
+            || other_keycode == L3_D
+            || other_keycode == KC_V
+            || other_keycode == KGUI_T
+        ) { return true; }
+        break;
+        case KSFT_R:
+        if(other_keycode == KC_Z
+            || other_keycode == L1_X
+            || other_keycode == L2_C
+            || other_keycode == L3_D
+            || other_keycode == KC_V
+        ) { return true; }
+        break;
+        case KALT_S:
+        if(other_keycode == KC_Z
+            || other_keycode == L1_X
+            || other_keycode == L2_C
+            || other_keycode == L3_D
+            || other_keycode == KC_V
+        ) { return true; }
+        break;
+        case KGUI_T:
+        if(other_keycode == KC_Z
+            || other_keycode == L1_X
+            || other_keycode == L2_C
+            || other_keycode == L3_D
+            || other_keycode == KC_V
+            || other_keycode == KC_P
+            || other_keycode == KC_W
+            || other_keycode == KC_F
+        ) { return true; }
+        break;
+        case KGUI_N:
+        if(other_keycode == KC_K
+            || other_keycode == KC_H
+            || other_keycode == KC_COMM
+            || other_keycode == KC_DOT
+            || other_keycode == L4_LSH
+            || other_keycode == KC_ENT
+        ) { return true; }
+        break;
+        case KALT_E:
+        if(other_keycode == KC_K
+            || other_keycode == KC_H
+            || other_keycode == KC_COMM
+            || other_keycode == KC_DOT
+            || other_keycode == L4_LSH
+        ) { return true; }
+        break;
+        //case KSFT_I:
+        //break;
+        case KCTL_O:
+        if(other_keycode == KC_K
+            || other_keycode == KC_H
+            || other_keycode == KC_COMM
+            || other_keycode == KC_DOT
+            || other_keycode == L4_LSH
+        ) { return true; }
+        break;
+        case L1_X:
+        return true;
+        case L2_C:
+        return true;
+        case L3_D:
+        return true;
+        case L4_LSH:
+        return true;
+    }
+
+    // Also allow same-hand holds when the other key is in the rows below the
+    // alphas. I need the `% (MATRIX_ROWS / 2)` because my keyboard is split.
+    //if (other_record->event.key.row % (MATRIX_ROWS / 2) >= 4) { return true; }
+
+    // Otherwise, follow the opposite hands rule.
+    return achordion_opposite_hands(tap_hold_record, other_record);
+}
+
 void matrix_scan_user(void) {
-  achordion_task();
+    achordion_task();
+}
+
+uint16_t achordion_streak_timeout(uint16_t tap_hold_keycode) {
+    if(IS_QK_LAYER_TAP(tap_hold_keycode)) {
+        return 0;  // Disable streak detection on layer-tap keys.
+    }
+
+    return 100;  // Default of 100 ms.
 }
 // END ACHORDION
 
