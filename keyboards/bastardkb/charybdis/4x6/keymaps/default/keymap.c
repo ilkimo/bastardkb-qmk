@@ -190,6 +190,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 };
 
+// declare custom keycodes from a safe range, this is can be put also in the layout
+enum custom_keycodes {
+    VIM_SAVE = SAFE_RANGE,
+    VIM_SAVE_EXIT,
+};
+
 // BEGIN ALT KEY MAPPINGS
 uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
     bool shifted = (mods & MOD_MASK_SHIFT);  // Was Shift held?
@@ -229,28 +235,60 @@ uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
 // END ALT KEY MAPPINGS
 
 // BEGIN COMBOS
+enum combo_events {
+    COMBO_NAVIGATION,
+    COMBO_ACCENTED,
+    COMBO_SYMBOL,
+    COMBO_SYMBOL_SHIFT,
+    COMBO_EMOJI,
+    COMBO_VIM_SAVE,
+    COMBO_VIM_SAVE_EXIT,
+};
+
 const uint16_t PROGMEM navigation_combo[] = {KC_G, KC_M, COMBO_END};
 const uint16_t PROGMEM accented_letters_combo[] = {KC_H, KC_COMM, COMBO_END};
 const uint16_t PROGMEM symbol_layer_shifted_combo[] = {KC_W, KC_F, COMBO_END};
 const uint16_t PROGMEM symbol_layer_combo[] = {KC_P, KC_F, COMBO_END};
 const uint16_t PROGMEM emoji_layer_combo[] = {KC_J, KC_L, COMBO_END};
+const uint16_t PROGMEM vim_save_combo[] = {KC_F, KC_P, KC_L, COMBO_END};
+const uint16_t PROGMEM vim_save_exit_all_combo[] = {KC_F, KC_P, KC_L, KC_U, COMBO_END};
+
 combo_t key_combos[] = {
-    COMBO(navigation_combo, TO(LAYER_NAVIGATION)),
-    COMBO(accented_letters_combo, OSL(LAYER_ACCENTED_LETTERS)),
-    COMBO(symbol_layer_combo, OSL(LAYER_SYMBOLS)),
-    COMBO(symbol_layer_shifted_combo, OSM(MOD_LSFT)),
-    COMBO(emoji_layer_combo, TO(LAYER_EMOJI)),
+    [COMBO_NAVIGATION] = COMBO(navigation_combo, TO(LAYER_NAVIGATION)),
+    [COMBO_ACCENTED] = COMBO(accented_letters_combo, OSL(LAYER_ACCENTED_LETTERS)),
+    [COMBO_SYMBOL] = COMBO(symbol_layer_combo, OSL(LAYER_SYMBOLS)),
+    [COMBO_SYMBOL_SHIFT] = COMBO(symbol_layer_shifted_combo, OSM(MOD_LSFT)),
+    [COMBO_EMOJI] = COMBO(emoji_layer_combo, TO(LAYER_EMOJI)),
+    [COMBO_VIM_SAVE] = COMBO(vim_save_combo, VIM_SAVE),
+    //[COMBO_VIM_SAVE_EXIT] = COMBO(emoji_layer_combo, TO(LAYER_EMOJI)),
 };
 // END COMBOS
 
-// BEGIN ACHORDION
+// BEGIN MACROS
 bool process_record_user(uint16_t keycode, keyrecord_t* record) {
-  if (!process_achordion(keycode, record)) { return false; }
-  // Your macros ...
+    if (!process_achordion(keycode, record)) { return false; }
+    // Your macros ...
+    switch(keycode) {
+    case VIM_SAVE:
+        if (record->event.pressed) {
+            // when keycode VIM_SAVE is pressed!
+            SEND_STRING(SS_TAP(X_ESC));
+            SEND_STRING(SS_DOWN(X_LSFT));
+            SEND_STRING(SS_TAP(X_SCLN));
+            SEND_STRING(SS_UP(X_LSFT));
+            SEND_STRING(SS_TAP(X_W));
+            SEND_STRING(SS_TAP(X_ENT));
+        } else {
+            // when keycode QMKBEST is released
+        }
+        break;
+    }
 
-  return true;
+    return true;
 }
+// END MACROS
 
+// BEGIN ACHORDION
 bool achordion_chord(uint16_t tap_hold_keycode,
                      keyrecord_t* tap_hold_record,
                      uint16_t other_keycode,
@@ -265,6 +303,7 @@ bool achordion_chord(uint16_t tap_hold_keycode,
             || other_keycode == L3_D
             || other_keycode == KC_V
             || other_keycode == KGUI_T
+            || other_keycode == KC_F
         ) { return true; }
         break;
         case KSFT_R:
@@ -319,7 +358,11 @@ bool achordion_chord(uint16_t tap_hold_keycode,
             || other_keycode == KC_COMM
             || other_keycode == KC_DOT
             || other_keycode == L4_LSH
-        ) { return true; }
+        ) {
+            return true;
+        } else if(other_keycode == KC_F) {
+            return false;
+        }
         break;
         case L1_X:
         return true;
@@ -348,7 +391,14 @@ uint16_t achordion_streak_timeout(uint16_t tap_hold_keycode) {
         return 0;  // Disable streak detection on layer-tap keys.
     }
 
-    return 100;  // Default of 100 ms.
+    switch(tap_hold_keycode) {
+    case L1_X:
+    case L2_C:
+    case L3_D:
+        return 50;
+    }
+
+    return 240;  // Default of 100 ms.
 }
 // END ACHORDION
 
