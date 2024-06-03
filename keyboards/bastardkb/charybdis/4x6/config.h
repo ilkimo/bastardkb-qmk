@@ -25,6 +25,7 @@
 #define MASTER_RIGHT
 
 // Kimo add
+#define TAPPING_TERM 200
 #define PERMISSIVE_HOLD // good with Achordion
 #define ACHORDION_STREAK
 
