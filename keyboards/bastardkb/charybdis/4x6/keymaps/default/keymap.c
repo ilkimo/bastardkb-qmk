@@ -79,7 +79,9 @@ enum unicode_names {
     O_GRAVE_MAIUSC,
     O_GRAVE_MINUSC,
     U_GRAVE_MAIUSC,
-    U_GRAVE_MINUSC
+    U_GRAVE_MINUSC,
+    EMOJI_LAUGH,
+    EMOJI_ROFL
 };
 
 #define ACENT_A UP(A_ACUTO, A_ACUTO_MAIUSC)
@@ -88,6 +90,7 @@ enum unicode_names {
 #define ACENT_I UP(I_GRAVE_MINUSC, I_GRAVE_MAIUSC)
 #define ACENT_O UP(O_GRAVE_MINUSC, O_GRAVE_MAIUSC)
 #define ACENT_U UP(U_GRAVE_MINUSC, U_GRAVE_MAIUSC)
+#define LAUGH UP(EMOJI_LAUGH, EMOJI_ROFL)
 
 const uint32_t PROGMEM unicode_map[] = {
     [BANG]  = 0x203D,
@@ -105,7 +108,9 @@ const uint32_t PROGMEM unicode_map[] = {
     [O_GRAVE_MAIUSC] = 0x00D2,
     [O_GRAVE_MINUSC] = 0x00F2,
     [U_GRAVE_MAIUSC] = 0x00D9,
-    [U_GRAVE_MINUSC] = 0x00F9
+    [U_GRAVE_MINUSC] = 0x00F9,
+    [EMOJI_LAUGH] = 0x1F602,
+    [EMOJI_ROFL] = 0x1F923
 };
 
 // clang-format off
@@ -236,7 +241,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       XXXXXXX,    KC_E,    KC_M,    KC_O,    KC_J,    KC_I,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX,   LAUGH, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
