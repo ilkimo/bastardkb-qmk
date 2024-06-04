@@ -81,7 +81,19 @@ enum unicode_names {
     U_GRAVE_MAIUSC,
     U_GRAVE_MINUSC,
     EMOJI_LAUGH,
-    EMOJI_ROFL
+    EMOJI_ROFL,
+    SLIGHTLY_SMILING_FACE,
+    UPSIDE_DOWN_FACE,
+    RED_HEART,
+    HEART_EXCLAMATION,
+    LOUDLY_CRYING,
+    ANXIOUS_FACE,
+    CHECK_MARK,
+    RED_CROSS,
+    MUSCLE,
+    EXPLOSION,
+    ANGRY,
+    PAROLACCE
 };
 
 #define ACENT_A UP(A_ACUTO, A_ACUTO_MAIUSC)
@@ -91,6 +103,12 @@ enum unicode_names {
 #define ACENT_O UP(O_GRAVE_MINUSC, O_GRAVE_MAIUSC)
 #define ACENT_U UP(U_GRAVE_MINUSC, U_GRAVE_MAIUSC)
 #define LAUGH UP(EMOJI_LAUGH, EMOJI_ROFL)
+#define SMILE UP(SLIGHTLY_SMILING_FACE, UPSIDE_DOWN_FACE)
+#define HEART UP(RED_HEART, HEART_EXCLAMATION)
+#define CRY UP(ANXIOUS_FACE, LOUDLY_CRYING)
+#define MARKS UP(CHECK_MARK, RED_CROSS)
+#define BICEPS UP(MUSCLE, EXPLOSION)
+#define ANGER UP(ANGRY, PAROLACCE)
 
 const uint32_t PROGMEM unicode_map[] = {
     [BANG]  = 0x203D,
@@ -110,7 +128,19 @@ const uint32_t PROGMEM unicode_map[] = {
     [U_GRAVE_MAIUSC] = 0x00D9,
     [U_GRAVE_MINUSC] = 0x00F9,
     [EMOJI_LAUGH] = 0x1F602,
-    [EMOJI_ROFL] = 0x1F923
+    [EMOJI_ROFL] = 0x1F923,
+    [SLIGHTLY_SMILING_FACE] = 0x1F642,
+    [UPSIDE_DOWN_FACE] = 0x1F643,
+    [RED_HEART] = 0x2764,
+    [HEART_EXCLAMATION] = 0x2763,
+    [LOUDLY_CRYING] = 0x1F62D,
+    [ANXIOUS_FACE] = 0x1F630,
+    [CHECK_MARK] = 0x2705,
+    [RED_CROSS] = 0x274C,
+    [MUSCLE] = 0x1F4AA,
+    [EXPLOSION] = 0x1F4A5,
+    [ANGRY] = 0x1F620,
+    [PAROLACCE] = 0x1F92C,
 };
 
 // clang-format off
@@ -241,7 +271,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX,   LAUGH, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+       XXXXXXX, XXXXXXX,   ANGER,  BICEPS,   MARKS, XXXXXXX,    XXXXXXX,   LAUGH,   SMILE,   HEART,     CRY, XXXXXXX,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
