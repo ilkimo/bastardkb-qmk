@@ -118,7 +118,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ╭──────────────────────────────────────────────────────╮ ╭──────────────────────────────────────────────────────╮
        QK_BOOT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       XXXXXXX, XXXXXXX, XXXXXXX, DM_PLY1, DM_REC1, XXXXXXX,    XXXXXXX, DM_REC2, DM_PLY2, XXXXXXX, XXXXXXX, XXXXXXX,
+       XXXXXXX, XXXXXXX, XXXXXXX, DM_PLY1, DM_REC1, XXXXXXX,    XXXXXXX, DM_REC2, DM_PLY2, XXXXXXX, KC_PSCR, XXXXXXX,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
        XXXXXXX,   M_CTL,   M_SFT,   M_ALT,   M_GUI, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
@@ -194,6 +194,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 enum custom_keycodes {
     VIM_SAVE = SAFE_RANGE,
     VIM_SAVE_EXIT,
+    LAYER_SYMBOL_SHIFT,
 };
 
 // BEGIN ALT KEY MAPPINGS
@@ -257,10 +258,10 @@ combo_t key_combos[] = {
     [COMBO_NAVIGATION] = COMBO(navigation_combo, TO(LAYER_NAVIGATION)),
     [COMBO_ACCENTED] = COMBO(accented_letters_combo, OSL(LAYER_ACCENTED_LETTERS)),
     [COMBO_SYMBOL] = COMBO(symbol_layer_combo, OSL(LAYER_SYMBOLS)),
-    [COMBO_SYMBOL_SHIFT] = COMBO(symbol_layer_shifted_combo, OSM(MOD_LSFT)),
+    [COMBO_SYMBOL_SHIFT] = COMBO(symbol_layer_shifted_combo, LAYER_SYMBOL_SHIFT),
     [COMBO_EMOJI] = COMBO(emoji_layer_combo, TO(LAYER_EMOJI)),
     [COMBO_VIM_SAVE] = COMBO(vim_save_combo, VIM_SAVE),
-    //[COMBO_VIM_SAVE_EXIT] = COMBO(emoji_layer_combo, TO(LAYER_EMOJI)),
+    [COMBO_VIM_SAVE_EXIT] = COMBO(vim_save_exit_all_combo, VIM_SAVE_EXIT),
 };
 // END COMBOS
 
@@ -276,12 +277,35 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
             SEND_STRING(SS_DOWN(X_LSFT));
             SEND_STRING(SS_TAP(X_SCLN));
             SEND_STRING(SS_UP(X_LSFT));
-            SEND_STRING(SS_TAP(X_W));
+            SEND_STRING(SS_TAP(X_W)SS_DELAY(300));
             SEND_STRING(SS_TAP(X_ENT));
         } else {
-            // when keycode QMKBEST is released
+            // when keycode VIM_SAVE is released!
         }
         break;
+    case VIM_SAVE_EXIT:
+        if (record->event.pressed) {
+            // when keycode VIM_SAVE_EXIT is pressed!
+            SEND_STRING(SS_TAP(X_ESC));
+            SEND_STRING(SS_DOWN(X_LSFT));
+            SEND_STRING(SS_TAP(X_SCLN));
+            SEND_STRING(SS_UP(X_LSFT));
+            SEND_STRING(SS_TAP(X_W)SS_TAP(X_Q)SS_TAP(X_A)SS_DELAY(300));
+            SEND_STRING(SS_TAP(X_ENT));
+        } else {
+            // when keycode VIM_SAVE_EXIT is released!
+        }
+        break;
+    case LAYER_SYMBOL_SHIFT:
+        if (record->event.pressed) {
+            // when keycode VIM_SAVE_EXIT is pressed!
+            //SEND_STRING(SS_TAP(OSM(X_LSFT)));
+            //SEND_STRING(SS_TAP(OSL(LAYER_ACCENTED_LETTERS)));
+        } else {
+            // when keycode VIM_SAVE_EXIT is released!
+        }
+        break;
+
     }
 
     return true;
