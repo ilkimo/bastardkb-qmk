@@ -26,7 +26,8 @@ enum charybdis_keymap_layers {
     LAYER_NAVIGATION,
     LAYER_MINECRAFT,
     LAYER_EMOJI,
-    LAYER_ACCENTED_LETTERS
+    LAYER_ACCENTED_LETTERS,
+    LAYER_SYMBOL_2
 };
 
 #define LOWER MO(LAYER_LOWER)
@@ -44,6 +45,7 @@ enum charybdis_keymap_layers {
 #define L1_X LT(1,KC_X)
 #define L2_C LT(2,KC_C)
 #define L3_D LT(3,KC_D)
+#define L_SYM2 LT(LAYER_SYMBOL_2, KC_MINS)
 #define L4_LSH LT(4,KC_SLSH)
 #define M_CTL KC_LCTL
 #define M_SFT KC_LSFT
@@ -51,6 +53,60 @@ enum charybdis_keymap_layers {
 #define M_GUI KC_LGUI
 #define ZIATILDE S(KC_GRV)
 #define GO_MINE TO(LAYER_MINECRAFT)
+
+//#define ACENT_E UP(, )
+
+// declare custom keycodes from a safe range, this is can be put also in the layout
+enum custom_keycodes {
+    VIM_SAVE = SAFE_RANGE,
+    VIM_SAVE_EXIT,
+    LAYER_SYMBOL_SHIFT,
+};
+
+enum unicode_names {
+    BANG,
+    IRONY,
+    SNEK,
+    A_ACUTO,
+    A_ACUTO_MAIUSC,
+    A_GRAVE_MINUSC,
+    E_GRAVE_MAIUSC,
+    E_GRAVE_MINUSC,
+    E_ACUTO_MAIUSC,
+    E_ACUTO_MINUSC,
+    I_GRAVE_MAIUSC,
+    I_GRAVE_MINUSC,
+    O_GRAVE_MAIUSC,
+    O_GRAVE_MINUSC,
+    U_GRAVE_MAIUSC,
+    U_GRAVE_MINUSC
+};
+
+#define ACENT_A UP(A_ACUTO, A_ACUTO_MAIUSC)
+#define ACUT_E UP(E_ACUTO_MINUSC, E_ACUTO_MAIUSC)
+#define GRAV_E UP(E_GRAVE_MINUSC, E_GRAVE_MAIUSC)
+#define ACENT_I UP(I_GRAVE_MINUSC, I_GRAVE_MAIUSC)
+#define ACENT_O UP(O_GRAVE_MINUSC, O_GRAVE_MAIUSC)
+#define ACENT_U UP(U_GRAVE_MINUSC, U_GRAVE_MAIUSC)
+
+const uint32_t PROGMEM unicode_map[] = {
+    [BANG]  = 0x203D,
+    [IRONY] = 0x2E2E,
+    [SNEK]  = 0x1F40D,
+    [A_ACUTO] = 0x00E0,
+    [A_ACUTO_MAIUSC] = 0x00C0,
+    [A_GRAVE_MINUSC] = 0x00E0,
+    [E_GRAVE_MAIUSC] = 0x00C8,
+    [E_GRAVE_MINUSC] = 0x00E8,
+    [E_ACUTO_MAIUSC] = 0x00C9,
+    [E_ACUTO_MINUSC] = 0x00E9,
+    [I_GRAVE_MAIUSC] = 0x00CC,
+    [I_GRAVE_MINUSC] = 0x00EC,
+    [O_GRAVE_MAIUSC] = 0x00D2,
+    [O_GRAVE_MINUSC] = 0x00F2,
+    [U_GRAVE_MAIUSC] = 0x00D9,
+    [U_GRAVE_MINUSC] = 0x00F9
+};
 
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
@@ -107,7 +163,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
        XXXXXXX,   M_CTL,   M_SFT, KC_COLN,   M_GUI, KC_BSLS,    KC_QUOT, S(KC_9), S(KC_0), KC_LBRC, KC_RBRC, XXXXXXX,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       XXXXXXX,ZIATILDE, KC_SLSH,  KC_DOT, KC_MINS,  KC_GRV,    KC_CAPS,KC_TAB,S(KC_COMM),S(KC_DOT),KC_SLSH, XXXXXXX,
+       XXXXXXX,ZIATILDE, KC_SLSH,  KC_DOT,  L_SYM2,  KC_GRV,    KC_CAPS,KC_TAB,S(KC_COMM),S(KC_DOT),KC_SLSH, XXXXXXX,
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
                                   _______, _______, _______,    _______, _______,
                                              TO(0), _______,    _______
@@ -163,11 +219,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ╭──────────────────────────────────────────────────────╮ ╭──────────────────────────────────────────────────────╮
        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, ACENT_U, XXXXXXX, XXXXXXX, XXXXXXX,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       XXXXXXX,    KC_A,    KC_C,    KC_C,    KC_E,    KC_N,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+       XXXXXXX, ACENT_A, KC_LSFT, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX,  ACUT_E, ACENT_I, ACENT_O, XXXXXXX,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX,  GRAV_E, XXXXXXX, XXXXXXX, XXXXXXX,
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
                                   _______, _______, _______,    _______, _______,
                                              TO(0), _______,    _______
@@ -188,13 +244,21 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
                                              TO(0), _______,    _______
   //                            ╰───────────────────────────╯ ╰──────────────────╯
   ),
-};
 
-// declare custom keycodes from a safe range, this is can be put also in the layout
-enum custom_keycodes {
-    VIM_SAVE = SAFE_RANGE,
-    VIM_SAVE_EXIT,
-    LAYER_SYMBOL_SHIFT,
+  [LAYER_SYMBOL_2] = LAYOUT(
+  // ╭──────────────────────────────────────────────────────╮ ╭──────────────────────────────────────────────────────╮
+       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
+       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
+       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
+       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
+                                  _______, _______, _______,    _______, _______,
+                                             TO(0), _______,    _______
+  //                            ╰───────────────────────────╯ ╰──────────────────╯
+  ),
 };
 
 // BEGIN ALT KEY MAPPINGS

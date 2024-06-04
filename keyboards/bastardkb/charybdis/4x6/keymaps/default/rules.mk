@@ -3,3 +3,4 @@ CAPS_WORD_ENABLE = yes
 DYNAMIC_MACRO_ENABLE = yes
 COMBO_ENABLE = yes
 SRC += features/achordion.c
+UNICODEMAP_ENABLE = yes
