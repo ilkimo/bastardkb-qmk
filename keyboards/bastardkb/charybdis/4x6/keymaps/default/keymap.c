@@ -59,9 +59,7 @@ enum charybdis_keymap_layers {
 
 // declare custom keycodes from a safe range, this is can be put also in the layout
 enum custom_keycodes {
-    VIM_SAVE = SAFE_RANGE,
-    VIM_SAVE_EXIT,
-    LAYER_SYMBOL_SHIFT,
+    LAYER_SYMBOL_SHIFT = SAFE_RANGE,
 };
 
 enum unicode_names {
@@ -156,8 +154,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
       XXXXXXX,    KC_Z,    L1_X,    L2_C,    L3_D,    KC_V,       KC_K,    KC_H, KC_COMM,  KC_DOT,  L4_LSH, XXXXXXX,
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
-                                   KC_SPC,KC_BSPC, XXXXXXX,      O_SFT,  KC_ENT,
-                                           KC_ESC, XXXXXXX,      QK_REPEAT_KEY
+                                   KC_SPC,KC_BSPC, XXXXXXX,      O_SFT,  KC_ESC,
+                                          QK_LEAD, XXXXXXX,      QK_REPEAT_KEY
  //                            ╰───────────────────────────╯ ╰──────────────────╯
   ),
 
@@ -171,7 +169,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
-                                  _______,  KC_DEL, _______,    _______, _______,
+                                  _______,  KC_DEL, _______,    _______,  KC_ENT,
                                              TO(0), _______,    QK_AREP
   //                            ╰───────────────────────────╯ ╰──────────────────╯
   ),
@@ -342,8 +340,6 @@ enum combo_events {
     COMBO_SYMBOL,
     COMBO_SYMBOL_SHIFT,
     COMBO_EMOJI,
-    COMBO_VIM_SAVE,
-    COMBO_VIM_SAVE_EXIT,
 };
 
 const uint16_t PROGMEM navigation_combo[] = {KC_G, KC_M, COMBO_END};
@@ -351,8 +347,6 @@ const uint16_t PROGMEM accented_letters_combo[] = {KC_H, KC_COMM, COMBO_END};
 const uint16_t PROGMEM symbol_layer_shifted_combo[] = {KC_W, KC_F, COMBO_END};
 const uint16_t PROGMEM symbol_layer_combo[] = {KC_P, KC_F, COMBO_END};
 const uint16_t PROGMEM emoji_layer_combo[] = {KC_J, KC_L, COMBO_END};
-const uint16_t PROGMEM vim_save_combo[] = {KC_F, KC_P, KC_L, COMBO_END};
-const uint16_t PROGMEM vim_save_exit_all_combo[] = {KC_F, KC_P, KC_L, KC_U, COMBO_END};
 
 combo_t key_combos[] = {
     [COMBO_NAVIGATION] = COMBO(navigation_combo, TO(LAYER_NAVIGATION)),
@@ -360,43 +354,43 @@ combo_t key_combos[] = {
     [COMBO_SYMBOL] = COMBO(symbol_layer_combo, OSL(LAYER_SYMBOLS)),
     [COMBO_SYMBOL_SHIFT] = COMBO(symbol_layer_shifted_combo, LAYER_SYMBOL_SHIFT),
     [COMBO_EMOJI] = COMBO(emoji_layer_combo, TO(LAYER_EMOJI)),
-    [COMBO_VIM_SAVE] = COMBO(vim_save_combo, VIM_SAVE),
-    [COMBO_VIM_SAVE_EXIT] = COMBO(vim_save_exit_all_combo, VIM_SAVE_EXIT),
 };
 // END COMBOS
 
+// BEGIN LEADER KEY
+void leader_start_user(void) {
+    // Do something when the leader key is pressed
+}
+
+void leader_end_user(void) {
+    if (leader_sequence_one_key(KC_S)) {
+        // Leader, s => [S]ave vim
+        SEND_STRING(SS_TAP(X_ESC));
+        SEND_STRING(":w\n");
+    } else if(leader_sequence_one_key(KC_E)) {
+        // Leader, e => [E]xit vim
+        SEND_STRING(SS_TAP(X_ESC));
+        SEND_STRING(":q\n");
+    } else if(leader_sequence_two_keys(KC_A, KC_C)) {
+        // Leader, a, c => Ctrl+A, Ctrl+C
+        SEND_STRING(SS_LCTL("a") SS_LCTL("c"));
+    } else if(leader_sequence_two_keys(KC_S, KC_E)) {
+        // Leader, s, e => [S]ave [E]xit vim
+        SEND_STRING(SS_TAP(X_ESC));
+        SEND_STRING(":wq\n");
+    }
+    // else if (leader_sequence_two_keys(KC_A, KC_S)) {
+        // Leader, a, s => GUI+S
+        // tap_code16(LGUI(KC_S));
+    //}
+}
+// END LEADER KEY
 // BEGIN MACROS
 bool process_record_user(uint16_t keycode, keyrecord_t* record) {
     if (!process_achordion(keycode, record)) { return false; }
     // Your macros ...
     switch(keycode) {
-    case VIM_SAVE:
-        if (record->event.pressed) {
-            // when keycode VIM_SAVE is pressed!
-            SEND_STRING(SS_TAP(X_ESC));
-            SEND_STRING(SS_DOWN(X_LSFT));
-            SEND_STRING(SS_TAP(X_SCLN));
-            SEND_STRING(SS_UP(X_LSFT));
-            SEND_STRING(SS_TAP(X_W)SS_DELAY(300));
-            SEND_STRING(SS_TAP(X_ENT));
-        } else {
-            // when keycode VIM_SAVE is released!
-        }
-        break;
-    case VIM_SAVE_EXIT:
-        if (record->event.pressed) {
-            // when keycode VIM_SAVE_EXIT is pressed!
-            SEND_STRING(SS_TAP(X_ESC));
-            SEND_STRING(SS_DOWN(X_LSFT));
-            SEND_STRING(SS_TAP(X_SCLN));
-            SEND_STRING(SS_UP(X_LSFT));
-            SEND_STRING(SS_TAP(X_W)SS_TAP(X_Q)SS_TAP(X_A)SS_DELAY(300));
-            SEND_STRING(SS_TAP(X_ENT));
-        } else {
-            // when keycode VIM_SAVE_EXIT is released!
-        }
-        break;
-    case LAYER_SYMBOL_SHIFT:
+    case LAYER_SYMBOL_SHIFT: // TODO
         if (record->event.pressed) {
             // when keycode VIM_SAVE_EXIT is pressed!
             //SEND_STRING(SS_TAP(OSM(X_LSFT)));

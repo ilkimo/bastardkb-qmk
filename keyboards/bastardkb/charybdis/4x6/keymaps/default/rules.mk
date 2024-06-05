@@ -4,3 +4,4 @@ DYNAMIC_MACRO_ENABLE = yes
 COMBO_ENABLE = yes
 SRC += features/achordion.c
 UNICODEMAP_ENABLE = yes
+LEADER_ENABLE = yes
