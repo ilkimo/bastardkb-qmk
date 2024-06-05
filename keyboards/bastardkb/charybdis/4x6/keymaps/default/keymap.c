@@ -564,7 +564,7 @@ uint16_t achordion_streak_timeout(uint16_t tap_hold_keycode) {
 // BEGIN TAPPING_TERM_PER_KEY
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case TD(SL):
+        case TD(SL): // this is to be comfortable while using the thumb cluster Shift tap dance
             return 500;
         default:
             return TAPPING_TERM;
