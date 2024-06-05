@@ -388,7 +388,7 @@ const uint16_t PROGMEM accented_letters_combo[] = {KC_H, KC_COMM, COMBO_END};
 const uint16_t PROGMEM symbol_layer_shifted_combo[] = {KC_W, KC_F, COMBO_END};
 const uint16_t PROGMEM symbol_layer_combo[] = {KC_P, KC_F, COMBO_END};
 const uint16_t PROGMEM emoji_layer_combo[] = {KC_J, KC_L, COMBO_END};
-const uint16_t PROGMEM leader_combo[] = {KC_SPC, KC_ENT, COMBO_END};
+const uint16_t PROGMEM leader_combo[] = {KC_ESC, QK_REPEAT_KEY, COMBO_END};
 
 combo_t key_combos[] = {
     [COMBO_NAVIGATION] = COMBO(navigation_combo, TO(LAYER_NAVIGATION)),
@@ -564,7 +564,7 @@ uint16_t achordion_streak_timeout(uint16_t tap_hold_keycode) {
 // BEGIN TAPPING_TERM_PER_KEY
 uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
-        case TD(SL): // this is to be comfortable while using the thumb cluster Shift tap dance
+        case TD(SL):
             return 500;
         default:
             return TAPPING_TERM;
