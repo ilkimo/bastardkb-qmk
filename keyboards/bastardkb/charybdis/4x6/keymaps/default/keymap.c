@@ -49,7 +49,6 @@ enum charybdis_keymap_layers {
 #define L4_LSH LT(4,KC_SLSH)
 #define M_CTL KC_LCTL
 #define M_SFT KC_LSFT
-#define O_SFT OSM(MOD_LSFT)
 #define M_ALT KC_LALT
 #define M_GUI KC_LGUI
 #define ZIATILDE S(KC_GRV)
@@ -60,6 +59,44 @@ enum charybdis_keymap_layers {
 // declare custom keycodes from a safe range, this is can be put also in the layout
 enum custom_keycodes {
     LAYER_SYMBOL_SHIFT = SAFE_RANGE,
+};
+
+// Tap Dance declarations
+enum {
+    SL,
+};
+
+void left_thumb_tap_each(tap_dance_state_t *state, void *user_data) {
+    switch (state->count) {
+        case 1:
+            break;
+        case 2:
+            break;
+        case 3:
+            break;
+        case 4:
+    }
+}
+
+void left_thumb_tap_finished(tap_dance_state_t *state, void *user_data) {
+    switch (state->count) {
+        case 1:
+            add_oneshot_mods(MOD_BIT(KC_LSFT));
+            break;
+        case 2:
+            caps_word_toggle();
+            break;
+        default:
+    }
+}
+
+void left_thumb_tap_reset(tap_dance_state_t *state, void *user_data) {
+
+}
+
+// Tap Dance definitions
+tap_dance_action_t tap_dance_actions[] = {
+    [SL] = ACTION_TAP_DANCE_FN_ADVANCED(left_thumb_tap_each, left_thumb_tap_finished, left_thumb_tap_reset)
 };
 
 enum unicode_names {
@@ -154,7 +191,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
       XXXXXXX,    KC_Z,    L1_X,    L2_C,    L3_D,    KC_V,       KC_K,    KC_H, KC_COMM,  KC_DOT,  L4_LSH, XXXXXXX,
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
-                                   KC_SPC,KC_BSPC, XXXXXXX,      O_SFT,  KC_ENT,
+                                   KC_SPC,KC_BSPC, XXXXXXX,      TD(SL),  KC_ENT,
                                            KC_ESC, XXXXXXX,      QK_REPEAT_KEY
  //                            ╰───────────────────────────╯ ╰──────────────────╯
   ),
@@ -169,7 +206,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
-                                  _______,  KC_DEL, _______,    _______,  KC_ENT,
+                                  _______,  KC_DEL, _______,    _______, _______,
                                              TO(0), _______,    QK_AREP
   //                            ╰───────────────────────────╯ ╰──────────────────╯
   ),
@@ -399,7 +436,6 @@ bool process_record_user(uint16_t keycode, keyrecord_t* record) {
             // when keycode VIM_SAVE_EXIT is released!
         }
         break;
-
     }
 
     return true;
