@@ -49,6 +49,7 @@ enum charybdis_keymap_layers {
 #define L4_LSH LT(4,KC_SLSH)
 #define M_CTL KC_LCTL
 #define M_SFT KC_LSFT
+#define O_SFT OSM(MOD_LSFT)
 #define M_ALT KC_LALT
 #define M_GUI KC_LGUI
 #define ZIATILDE S(KC_GRV)
@@ -155,7 +156,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
       XXXXXXX,    KC_Z,    L1_X,    L2_C,    L3_D,    KC_V,       KC_K,    KC_H, KC_COMM,  KC_DOT,  L4_LSH, XXXXXXX,
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
-                                   KC_SPC,KC_BSPC, XXXXXXX,      M_SFT,  KC_ENT,
+                                   KC_SPC,KC_BSPC, XXXXXXX,      O_SFT,  KC_ENT,
                                            KC_ESC, XXXXXXX,      QK_REPEAT_KEY
  //                            ╰───────────────────────────╯ ╰──────────────────╯
   ),
