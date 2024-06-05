@@ -86,6 +86,9 @@ void left_thumb_tap_finished(tap_dance_state_t *state, void *user_data) {
         case 2:
             caps_word_toggle();
             break;
+        case 3:
+            tap_code16(KC_CAPS);
+            break;
         default:
     }
 }
