@@ -26,6 +26,7 @@
 
 // Kimo add
 #define TAPPING_TERM 185
+#define TAPPING_TERM_PER_KEY
 //#define PERMISSIVE_HOLD // good with Achordion
 #define ACHORDION_STREAK
 #define LEADER_PER_KEY_TIMING
