@@ -45,7 +45,7 @@ enum charybdis_keymap_layers {
 #define L1_X LT(1,KC_X)
 #define L2_C LT(2,KC_C)
 #define L3_D LT(3,KC_D)
-#define L_SYM2 LT(LAYER_SYMBOL_2, KC_MINS)
+#define L_SYM2 TO(LAYER_SYMBOL_2)
 #define L4_LSH LT(4,KC_SLSH)
 #define M_CTL KC_LCTL
 #define M_SFT KC_LSFT
@@ -237,7 +237,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
        XXXXXXX,   M_CTL,   M_SFT, KC_COLN,   M_GUI, KC_BSLS,    KC_QUOT, S(KC_9), S(KC_0), KC_LBRC, KC_RBRC, XXXXXXX,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       XXXXXXX,ZIATILDE, KC_SLSH,  KC_DOT, XXXXXXX,  KC_GRV,     L_SYM2,KC_TAB,S(KC_COMM),S(KC_DOT),KC_SLSH, XXXXXXX,
+       XXXXXXX,ZIATILDE, KC_SLSH,  KC_DOT, KC_MINS,  KC_GRV,     L_SYM2,KC_TAB,S(KC_COMM),S(KC_DOT),KC_SLSH, XXXXXXX,
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
                                   _______, _______, _______,    _______, _______,
                                              TO(0), _______,    _______
