@@ -141,7 +141,7 @@ const uint32_t PROGMEM unicode_map[] = {
     [ANGRY] = 0x1F620,
     [PAROLACCE] = 0x1F92C,
 };
-
+// QK_LEAD
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [LAYER_BASE] = LAYOUT(
@@ -154,8 +154,8 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
       XXXXXXX,    KC_Z,    L1_X,    L2_C,    L3_D,    KC_V,       KC_K,    KC_H, KC_COMM,  KC_DOT,  L4_LSH, XXXXXXX,
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
-                                   KC_SPC,KC_BSPC, XXXXXXX,      O_SFT,  KC_ESC,
-                                          QK_LEAD, XXXXXXX,      QK_REPEAT_KEY
+                                   KC_SPC,KC_BSPC, XXXXXXX,      O_SFT,  KC_ENT,
+                                           KC_ESC, XXXXXXX,      QK_REPEAT_KEY
  //                            ╰───────────────────────────╯ ╰──────────────────╯
   ),
 
