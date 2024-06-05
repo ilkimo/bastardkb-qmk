@@ -181,7 +181,7 @@ const uint32_t PROGMEM unicode_map[] = {
     [ANGRY] = 0x1F620,
     [PAROLACCE] = 0x1F92C,
 };
-// QK_LEAD
+
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [LAYER_BASE] = LAYOUT(
@@ -237,7 +237,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
        XXXXXXX,   M_CTL,   M_SFT, KC_COLN,   M_GUI, KC_BSLS,    KC_QUOT, S(KC_9), S(KC_0), KC_LBRC, KC_RBRC, XXXXXXX,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       XXXXXXX,ZIATILDE, KC_SLSH,  KC_DOT,  L_SYM2,  KC_GRV,    KC_CAPS,KC_TAB,S(KC_COMM),S(KC_DOT),KC_SLSH, XXXXXXX,
+       XXXXXXX,ZIATILDE, KC_SLSH,  KC_DOT, XXXXXXX,  KC_GRV,     L_SYM2,KC_TAB,S(KC_COMM),S(KC_DOT),KC_SLSH, XXXXXXX,
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
                                   _______, _______, _______,    _______, _______,
                                              TO(0), _______,    _______
@@ -380,6 +380,7 @@ enum combo_events {
     COMBO_SYMBOL,
     COMBO_SYMBOL_SHIFT,
     COMBO_EMOJI,
+    COMBO_LEADER,
 };
 
 const uint16_t PROGMEM navigation_combo[] = {KC_G, KC_M, COMBO_END};
@@ -387,6 +388,7 @@ const uint16_t PROGMEM accented_letters_combo[] = {KC_H, KC_COMM, COMBO_END};
 const uint16_t PROGMEM symbol_layer_shifted_combo[] = {KC_W, KC_F, COMBO_END};
 const uint16_t PROGMEM symbol_layer_combo[] = {KC_P, KC_F, COMBO_END};
 const uint16_t PROGMEM emoji_layer_combo[] = {KC_J, KC_L, COMBO_END};
+const uint16_t PROGMEM leader_combo[] = {KC_SPC, KC_ENT, COMBO_END};
 
 combo_t key_combos[] = {
     [COMBO_NAVIGATION] = COMBO(navigation_combo, TO(LAYER_NAVIGATION)),
@@ -394,6 +396,7 @@ combo_t key_combos[] = {
     [COMBO_SYMBOL] = COMBO(symbol_layer_combo, OSL(LAYER_SYMBOLS)),
     [COMBO_SYMBOL_SHIFT] = COMBO(symbol_layer_shifted_combo, LAYER_SYMBOL_SHIFT),
     [COMBO_EMOJI] = COMBO(emoji_layer_combo, TO(LAYER_EMOJI)),
+    [COMBO_LEADER] = COMBO(leader_combo, QK_LEAD),
 };
 // END COMBOS
 
