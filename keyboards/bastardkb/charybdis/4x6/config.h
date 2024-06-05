@@ -28,7 +28,7 @@
 #define TAPPING_TERM 185
 //#define PERMISSIVE_HOLD // good with Achordion
 #define ACHORDION_STREAK
-#define UNICODE_SELECTED_MODES UNICODE_MODE_LINUX
+#define LEADER_TIMEOUT 500
 
 // To use the handedness pin, resistors need to be installed on the adapter PCB.
 // If so, uncomment the following code, and undefine MASTER_RIGHT above.
