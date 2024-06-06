@@ -6,4 +6,4 @@ SRC += features/achordion.c
 UNICODEMAP_ENABLE = yes
 LEADER_ENABLE = yes
 TAP_DANCE_ENABLE = yes
-
+SWAP_HANDS_ENABLE = yes
