@@ -53,6 +53,7 @@ enum charybdis_keymap_layers {
 #define M_GUI KC_LGUI
 #define ZIATILDE S(KC_GRV)
 #define GO_MINE TO(LAYER_MINECRAFT)
+#define K_RPT QK_REPEAT_KEY
 
 //#define ACENT_E UP(, )
 
@@ -64,6 +65,7 @@ enum custom_keycodes {
 // Tap Dance declarations
 enum {
     SL,
+    SFT
 };
 
 void left_thumb_tap_each(tap_dance_state_t *state, void *user_data) {
@@ -97,9 +99,41 @@ void left_thumb_tap_reset(tap_dance_state_t *state, void *user_data) {
 
 }
 
+void left_pinky_tap_each(tap_dance_state_t *state, void *user_data) {
+    switch (state->count) {
+        case 1:
+            break;
+        case 2:
+            break;
+        case 3:
+            break;
+        case 4:
+    }
+}
+
+void left_pinky_tap_finished(tap_dance_state_t *state, void *user_data) {
+    switch (state->count) {
+        case 1:
+            swap_hands_toggle();
+            break;
+        case 2:
+            caps_word_toggle(); //TODO
+            break;
+        case 3:
+            tap_code16(KC_CAPS); //TODO
+            break;
+        default:
+    }
+}
+
+void left_pinky_tap_reset(tap_dance_state_t *state, void *user_data) {
+
+}
+
 // Tap Dance definitions
 tap_dance_action_t tap_dance_actions[] = {
-    [SL] = ACTION_TAP_DANCE_FN_ADVANCED(left_thumb_tap_each, left_thumb_tap_finished, left_thumb_tap_reset)
+    [SL] = ACTION_TAP_DANCE_FN_ADVANCED(left_thumb_tap_each, left_thumb_tap_finished, left_thumb_tap_reset),
+    [SFT] = ACTION_TAP_DANCE_FN_ADVANCED(left_pinky_tap_each, left_pinky_tap_finished, left_pinky_tap_reset)
 };
 
 enum unicode_names {
@@ -186,16 +220,16 @@ const uint32_t PROGMEM unicode_map[] = {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [LAYER_BASE] = LAYOUT(
   // ╭──────────────────────────────────────────────────────╮ ╭──────────────────────────────────────────────────────╮
-      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,   TO(5),
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-      XXXXXXX,    KC_Q,    KC_W,    KC_F,    KC_P,    KC_B,       KC_J,    KC_L,    KC_U,    KC_Y, KC_SCLN, XXXXXXX,
+      XXXXXXX,    KC_Q,    KC_W,    KC_F,    KC_P,    KC_B,       KC_J,    KC_L,    KC_U,    KC_Y, TD(SFT), XXXXXXX,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
       XXXXXXX,  KCTL_A,  KSFT_R,  KALT_S,  KGUI_T,    KC_G,       KC_M,  KGUI_N,  KALT_E,  KSFT_I,  KCTL_O, XXXXXXX,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
       XXXXXXX,    KC_Z,    L1_X,    L2_C,    L3_D,    KC_V,       KC_K,    KC_H, KC_COMM,  KC_DOT,  L4_LSH, XXXXXXX,
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
                                    KC_SPC,KC_BSPC, XXXXXXX,      TD(SL),  KC_ENT,
-                                           KC_ESC, XXXXXXX,      QK_REPEAT_KEY
+                                           KC_ESC, XXXXXXX,       K_RPT
  //                            ╰───────────────────────────╯ ╰──────────────────╯
   ),
 
@@ -263,13 +297,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ╭──────────────────────────────────────────────────────╮ ╭──────────────────────────────────────────────────────╮
        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       XXXXXXX, XXXXXXX, XXXXXXX, GO_MINE, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+       XXXXXXX, XXXXXXX, XXXXXXX, GO_MINE, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX,   TO(7),   TO(8),   TO(9), XXXXXXX,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX,   TO(4),   TO(5),   TO(6), XXXXXXX,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       XXXXXXX, XXXXXXX,   TO(1),   TO(2),   TO(3),   TO(5),    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,   TO(4), XXXXXXX,
+       XXXXXXX, XXXXXXX,   TO(1),   TO(2),   TO(3),   TO(5),    XXXXXXX, XXXXXXX,   TO(1),   TO(2),   TO(3), XXXXXXX,
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
-                                  _______, _______, _______,    _______, _______,
+                                  _______, _______, _______,    _______,   TO(0),
                                              TO(0), _______,    _______
   //                            ╰───────────────────────────╯ ╰──────────────────╯
   ),
@@ -335,6 +369,21 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   ),
 };
 
+const keypos_t PROGMEM hand_swap_config[MATRIX_ROWS][MATRIX_COLS] = {
+    /* Left hand, matrix positions */
+    {{0, 5}, {1, 5}, {2, 5}, {3, 5}, {4, 5}, {5, 5}},
+    {{0, 6}, {1, 6}, {2, 6}, {3, 6}, {4, 6}, {5, 6}},
+    {{0, 7}, {1, 7}, {2, 7}, {3, 7}, {4, 7}, {5, 7}},
+    {{0, 8}, {1, 8}, {2, 8}, {3, 8}, {4, 8}, {5, 8}},
+    {{2, 9}, {4, 9}, {5, 9}, {1, 9}, {0, 9}, {3, 9}},
+    /* Right hand, matrix positions */
+    {{0, 0}, {1, 0}, {2, 0}, {3, 0}, {4, 0}, {5, 0}},
+    {{0, 1}, {1, 1}, {2, 1}, {3, 1}, {4, 1}, {5, 1}},
+    {{0, 2}, {1, 2}, {2, 2}, {3, 2}, {4, 2}, {5, 2}},
+    {{0, 3}, {1, 3}, {2, 3}, {3, 3}, {4, 3}, {5, 3}},
+    {{0, 4}, {3, 4}, {2, 4}, {5, 4}, {4, 4}, {2, 4}},
+};
+
 // BEGIN ALT KEY MAPPINGS
 uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
     bool shifted = (mods & MOD_MASK_SHIFT);  // Was Shift held?
@@ -375,28 +424,31 @@ uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
 
 // BEGIN COMBOS
 enum combo_events {
-    COMBO_NAVIGATION,
     COMBO_ACCENTED,
     COMBO_SYMBOL,
     COMBO_SYMBOL_SHIFT,
     COMBO_EMOJI,
     COMBO_LEADER,
+    COMBO_SWAP_HANDS_RIGHT,
+    COMBO_SWAP_HANDS_LEFT,
 };
 
-const uint16_t PROGMEM navigation_combo[] = {KC_G, KC_M, COMBO_END};
 const uint16_t PROGMEM accented_letters_combo[] = {KC_H, KC_COMM, COMBO_END};
 const uint16_t PROGMEM symbol_layer_shifted_combo[] = {KC_W, KC_F, COMBO_END};
 const uint16_t PROGMEM symbol_layer_combo[] = {KC_P, KC_F, COMBO_END};
 const uint16_t PROGMEM emoji_layer_combo[] = {KC_J, KC_L, COMBO_END};
-const uint16_t PROGMEM leader_combo[] = {KC_ESC, QK_REPEAT_KEY, COMBO_END};
+const uint16_t PROGMEM leader_combo[] = {KC_U, KC_Y, COMBO_END};
+const uint16_t PROGMEM swap_hands_right_combo[] = {KC_DOT, KC_COMM, COMBO_END};
+const uint16_t PROGMEM swap_hands_left_combo[] = {L1_D, L2_C, COMBO_END};
 
 combo_t key_combos[] = {
-    [COMBO_NAVIGATION] = COMBO(navigation_combo, TO(LAYER_NAVIGATION)),
     [COMBO_ACCENTED] = COMBO(accented_letters_combo, OSL(LAYER_ACCENTED_LETTERS)),
     [COMBO_SYMBOL] = COMBO(symbol_layer_combo, OSL(LAYER_SYMBOLS)),
     [COMBO_SYMBOL_SHIFT] = COMBO(symbol_layer_shifted_combo, LAYER_SYMBOL_SHIFT),
     [COMBO_EMOJI] = COMBO(emoji_layer_combo, TO(LAYER_EMOJI)),
     [COMBO_LEADER] = COMBO(leader_combo, QK_LEAD),
+    [COMBO_SWAP_HANDS_RIGHT] = COMBO(swap_hands_right_combo, SH_TOGG),
+    [COMBO_SWAP_HANDS_LEFT] = COMBO(swap_hands_left_combo, SH_TOGG),
 };
 // END COMBOS
 
@@ -406,7 +458,7 @@ void leader_start_user(void) {
 }
 
 void leader_end_user(void) {
-    if (leader_sequence_one_key(KC_S)) {
+    if(leader_sequence_one_key(KC_S)) {
         // Leader, s => [S]ave vim
         SEND_STRING(SS_TAP(X_ESC));
         SEND_STRING(":w\n");
