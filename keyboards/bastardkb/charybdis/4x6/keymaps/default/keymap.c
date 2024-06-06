@@ -439,7 +439,7 @@ const uint16_t PROGMEM symbol_layer_combo[] = {KC_P, KC_F, COMBO_END};
 const uint16_t PROGMEM emoji_layer_combo[] = {KC_J, KC_L, COMBO_END};
 const uint16_t PROGMEM leader_combo[] = {KC_U, KC_Y, COMBO_END};
 const uint16_t PROGMEM swap_hands_right_combo[] = {KC_DOT, KC_COMM, COMBO_END};
-const uint16_t PROGMEM swap_hands_left_combo[] = {L1_D, L2_C, COMBO_END};
+const uint16_t PROGMEM swap_hands_left_combo[] = {L1_X, L2_C, COMBO_END};
 
 combo_t key_combos[] = {
     [COMBO_ACCENTED] = COMBO(accented_letters_combo, OSL(LAYER_ACCENTED_LETTERS)),
