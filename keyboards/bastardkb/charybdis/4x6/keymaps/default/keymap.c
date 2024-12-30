@@ -17,8 +17,16 @@
 #include QMK_KEYBOARD_H
 #include "features/achordion.h"
 
+/*
+ * Please take care that the numbers I use in my define are a little
+ * messed up for historycal reasons. For example the qwerty layer
+ * does not mean to be layer index one, but in the actual array
+ * it is. To fix this I would chage the names of the defines I made,
+ * like for example L1_X.
+ */
 enum charybdis_keymap_layers {
     LAYER_BASE = 0,
+    LAYER_QWERTY,
     LAYER_ARROWS,
     LAYER_NUMBERS,
     LAYER_SYMBOLS,
@@ -34,6 +42,9 @@ enum charybdis_keymap_layers {
 #define RAISE MO(LAYER_RAISE)
 
 // 'K' stands for Kimo
+#define QWERTY DF(LAYER_QWERTY)
+#define COLEMAK DF(LAYER_BASE)
+// define colemak homerow mods
 #define KCTL_A MT(MOD_LCTL,KC_A)
 #define KSFT_R MT(MOD_LSFT,KC_R)
 #define KALT_S MT(MOD_LALT,KC_S)
@@ -42,11 +53,23 @@ enum charybdis_keymap_layers {
 #define KALT_E MT(MOD_LALT,KC_E)
 #define KSFT_I MT(MOD_LSFT,KC_I)
 #define KCTL_O MT(MOD_LCTL,KC_O)
-#define L1_X LT(1,KC_X)
-#define L2_C LT(2,KC_C)
-#define L3_D LT(3,KC_D)
+// define qwerty homerow mods
+#define KSFT_S MT(MOD_LSFT,KC_S)
+#define KALT_D MT(MOD_LALT,KC_D)
+#define KGUI_F MT(MOD_LGUI,KC_F)
+#define KGUI_J MT(MOD_LGUI,KC_J)
+#define KALT_K MT(MOD_LALT,KC_K)
+#define KSFT_L MT(MOD_LSFT,KC_L)
+// then P because the left pinky's normal position is messed up when going back to qwerty
+#define KCTL_P MT(MOD_LCTL,KC_P)
+
+#define L1_X LT(LAYER_ARROWS,KC_X)
+#define L2_C LT(LAYER_NUMBERS,KC_C)
+#define L3_D LT(LAYER_SYMBOLS,KC_D)
+// define qwerty alternative
+#define L3_V LT(LAYER_SYMBOLS,KC_V)
 #define L_SYM2 TO(LAYER_SYMBOL_2)
-#define L4_LSH LT(4,KC_SLSH)
+#define L4_LSH LT(LAYER_MOUSE,KC_SLSH)
 #define M_CTL KC_LCTL
 #define M_SFT KC_LSFT
 #define M_ALT KC_LALT
@@ -117,7 +140,7 @@ void left_pinky_tap_finished(tap_dance_state_t *state, void *user_data) {
             swap_hands_toggle();
             break;
         case 2:
-            caps_word_toggle(); //TODO
+            layer_move(LAYER_NAVIGATION);
             break;
         case 3:
             tap_code16(KC_CAPS); //TODO
@@ -168,7 +191,7 @@ enum unicode_names {
     ANGRY,
     PAROLACCE
 };
-
+// sus
 #define ACENT_A UP(A_ACUTO, A_ACUTO_MAIUSC)
 #define ACUT_E UP(E_ACUTO_MINUSC, E_ACUTO_MAIUSC)
 #define GRAV_E UP(E_GRAVE_MINUSC, E_GRAVE_MAIUSC)
@@ -220,13 +243,28 @@ const uint32_t PROGMEM unicode_map[] = {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [LAYER_BASE] = LAYOUT(
   // ╭──────────────────────────────────────────────────────╮ ╭──────────────────────────────────────────────────────╮
-      XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,   TO(5),
+       QWERTY, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,   TO(5),
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
       XXXXXXX,    KC_Q,    KC_W,    KC_F,    KC_P,    KC_B,       KC_J,    KC_L,    KC_U,    KC_Y, TD(SFT), XXXXXXX,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
       XXXXXXX,  KCTL_A,  KSFT_R,  KALT_S,  KGUI_T,    KC_G,       KC_M,  KGUI_N,  KALT_E,  KSFT_I,  KCTL_O, XXXXXXX,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
       XXXXXXX,    KC_Z,    L1_X,    L2_C,    L3_D,    KC_V,       KC_K,    KC_H, KC_COMM,  KC_DOT,  L4_LSH, XXXXXXX,
+  // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
+                                   KC_SPC,KC_BSPC, XXXXXXX,      TD(SL),  KC_ENT,
+                                           KC_ESC, XXXXXXX,       K_RPT
+ //                            ╰───────────────────────────╯ ╰──────────────────╯
+  ),
+
+  [LAYER_QWERTY] = LAYOUT(
+  // ╭──────────────────────────────────────────────────────╮ ╭──────────────────────────────────────────────────────╮
+      COLEMAK, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,   TO(5),
+  // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
+      XXXXXXX,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,       KC_Y,    KC_U,    KC_I,    KC_O,    KC_P, XXXXXXX,
+  // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
+      XXXXXXX,  KCTL_A,  KSFT_S,  KALT_D,  KGUI_F,    KC_G,       KC_H,  KGUI_J,  KALT_K,  KSFT_L,  TD(SFT),XXXXXXX,
+  // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
+      XXXXXXX,    KC_Z,    L1_X,    L2_C,    L3_V,    KC_B,       KC_N,    KC_M, KC_COMM,  KC_DOT,  L4_LSH, XXXXXXX,
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
                                    KC_SPC,KC_BSPC, XXXXXXX,      TD(SL),  KC_ENT,
                                            KC_ESC, XXXXXXX,       K_RPT
@@ -267,7 +305,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ╭──────────────────────────────────────────────────────╮ ╭──────────────────────────────────────────────────────╮
        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       XXXXXXX, S(KC_1), S(KC_2), S(KC_3), S(KC_4), S(KC_5),    S(KC_6), S(KC_7), S(KC_8), KC_EQL, KC_SCLN, XXXXXXX,
+       XXXXXXX, S(KC_1), S(KC_2), S(KC_3), S(KC_4), S(KC_5),    S(KC_6), S(KC_7), S(KC_8),  KC_EQL, KC_SCLN, XXXXXXX,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
        XXXXXXX,   M_CTL,   M_SFT, KC_COLN,   M_GUI, KC_BSLS,    KC_QUOT, S(KC_9), S(KC_0), KC_LBRC, KC_RBRC, XXXXXXX,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
@@ -280,9 +318,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [LAYER_MOUSE] = LAYOUT(
   // ╭──────────────────────────────────────────────────────╮ ╭──────────────────────────────────────────────────────╮
-       QK_BOOT, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       XXXXXXX, XXXXXXX, XXXXXXX, DM_PLY1, DM_REC1, XXXXXXX,    XXXXXXX, DM_REC2, DM_PLY2, XXXXXXX, KC_PSCR, XXXXXXX,
+       XXXXXXX, QK_BOOT, RGB_TOG, DM_PLY1, DM_REC1, XXXXXXX,    XXXXXXX, DM_REC2, DM_PLY2, XXXXXXX, KC_PSCR, XXXXXXX,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
        XXXXXXX,   M_CTL,   M_SFT,   M_ALT,   M_GUI, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
@@ -357,7 +395,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ╭──────────────────────────────────────────────────────╮ ╭──────────────────────────────────────────────────────╮
        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, KC_CIRC, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
