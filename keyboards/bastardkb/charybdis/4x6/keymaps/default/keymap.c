@@ -322,9 +322,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
        XXXXXXX, QK_BOOT, RGB_TOG, DM_PLY1, DM_REC1, XXXXXXX,    XXXXXXX, DM_REC2, DM_PLY2, XXXXXXX, KC_PSCR, XXXXXXX,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       XXXXXXX,   M_CTL,   M_SFT, RGB_VAD, RGB_VAI, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+       XXXXXXX, RGB_MOD, RGB_HUI, RGB_SAI, RGB_VAI, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, RGB_SPI, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
                                   _______, _______, _______,    _______, _______,
                                              TO(0), _______,    _______
@@ -455,6 +455,11 @@ uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
         } else {
             return KC_TRNS;
         }
+    case RGB_HUI: return RGB_HUI;  // Increase hue maps to decrease hue
+    case RGB_MOD: return RGB_RMOD;  // Next animation mode maps to previous animation mode
+    case RGB_VAI: return RGB_VAD;  // Increase brightness maps to decrease brightness
+    case RGB_SAI: return RGB_SAD;  // Increase saturation maps to decrease saturation
+    case RGB_SPI: return RGB_SPD;  // Increase animation speed maps to decrease animation speed
     default: return KC_TRNS;  // Defer to default definitions.
     }
 }
