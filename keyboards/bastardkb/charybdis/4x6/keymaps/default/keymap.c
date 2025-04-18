@@ -650,7 +650,7 @@ uint16_t achordion_streak_timeout(uint16_t tap_hold_keycode) {
     case L1_X:
     case L2_C:
     case L3_D:
-        return 50;
+        return 70;
     }
 
     return 240;  // Default of 100 ms.
