@@ -559,7 +559,8 @@ bool achordion_chord(uint16_t tap_hold_keycode,
             || other_keycode == L1_X
             || other_keycode == L2_C
             || other_keycode == L3_D
-            || other_keycode == KC_V
+            || other_keycode == L_NAV_V
+            || other_keycode == L_NAV_B
             || other_keycode == KGUI_T
             || other_keycode == KC_F
         ) { return true; }
@@ -569,7 +570,8 @@ bool achordion_chord(uint16_t tap_hold_keycode,
             || other_keycode == L1_X
             || other_keycode == L2_C
             || other_keycode == L3_D
-            || other_keycode == KC_V
+            || other_keycode == L_NAV_V
+            || other_keycode == L_NAV_B
         ) { return true; }
         break;
         case KALT_S:
@@ -577,7 +579,8 @@ bool achordion_chord(uint16_t tap_hold_keycode,
             || other_keycode == L1_X
             || other_keycode == L2_C
             || other_keycode == L3_D
-            || other_keycode == KC_V
+            || other_keycode == L_NAV_V
+            || other_keycode == L_NAV_B
         ) { return true; }
         break;
         case KGUI_T:
@@ -585,7 +588,8 @@ bool achordion_chord(uint16_t tap_hold_keycode,
             || other_keycode == L1_X
             || other_keycode == L2_C
             || other_keycode == L3_D
-            || other_keycode == KC_V
+            || other_keycode == L_NAV_V
+            || other_keycode == L_NAV_B
             || other_keycode == KC_P
             || other_keycode == KC_W
             || other_keycode == KC_F
