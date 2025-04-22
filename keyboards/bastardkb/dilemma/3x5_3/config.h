@@ -22,6 +22,16 @@
 #define SPLIT_HAND_PIN GP29
 #define SPLIT_HAND_PIN_LOW_IS_LEFT // High -> right, Low -> left.
 
+// Kimo add
+#define TAPPING_TERM 185
+#define TAPPING_TERM_PER_KEY
+//#define PERMISSIVE_HOLD // good with Achordion
+#define ACHORDION_STREAK
+#define LEADER_PER_KEY_TIMING
+#define LEADER_TIMEOUT 300
+#define COMBO_TERM 40
+// Kimo add END
+
 /* VBUS detection. */
 #define USB_VBUS_PIN GP19
 

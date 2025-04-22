@@ -16,65 +16,630 @@
  */
 
 #include QMK_KEYBOARD_H
+#include "features/achordion.h"
 
 enum dilemma_keymap_layers {
     LAYER_BASE = 0,
-    LAYER_NAV,
-    LAYER_SYM,
-    LAYER_NUM,
+    LAYER_QWERTY,
+    LAYER_ARROWS,
+    LAYER_NUMBERS,
+    LAYER_SYMBOLS,
+    LAYER_MOUSE,
+    LAYER_NAVIGATION,
+    LAYER_MINECRAFT,
+    LAYER_ACCENTED_LETTERS,
+    LAYER_EMOJI,
+    LAYER_SYMBOL_2
 };
 
 #define NAV QK_TRI_LAYER_LOWER
 #define SYM QK_TRI_LAYER_UPPER
 
+// 'K' stands for Kimo
+#define QWERTY DF(LAYER_QWERTY)
+#define COLEMAK DF(LAYER_BASE)
+// define colemak homerow mods
+#define KCTL_A MT(MOD_LCTL,KC_A)
+#define KSFT_R MT(MOD_LSFT,KC_R)
+#define KALT_S MT(MOD_LALT,KC_S)
+#define KGUI_T MT(MOD_LGUI,KC_T)
+#define KGUI_N MT(MOD_LGUI,KC_N)
+#define KALT_E MT(MOD_LALT,KC_E)
+#define KSFT_I MT(MOD_LSFT,KC_I)
+#define KCTL_O MT(MOD_LCTL,KC_O)
+// define qwerty homerow mods
+#define KSFT_S MT(MOD_LSFT,KC_S)
+#define KALT_D MT(MOD_LALT,KC_D)
+#define KGUI_F MT(MOD_LGUI,KC_F)
+#define KGUI_J MT(MOD_LGUI,KC_J)
+#define KALT_K MT(MOD_LALT,KC_K)
+#define KSFT_L MT(MOD_LSFT,KC_L)
+// then P because the left pinky's normal position is messed up when going back to qwerty
+#define KCTL_P MT(MOD_LCTL,KC_P)
+
+#define L1_X LT(LAYER_ARROWS,KC_X)
+#define L2_C LT(LAYER_NUMBERS,KC_C)
+#define L3_D LT(LAYER_SYMBOLS,KC_D)
+#define L_NAV_V LT(LAYER_NAVIGATION,KC_V)
+#define L_NAV_B LT(LAYER_NAVIGATION,KC_B)
+#define K_NAV TO(LAYER_NAVIGATION)
+// define qwerty alternative
+#define L3_V LT(LAYER_SYMBOLS,KC_V)
+#define L_SYM2 TO(LAYER_SYMBOL_2)
+#define L4_LSH LT(LAYER_MOUSE,KC_SLSH)
+#define M_CTL KC_LCTL
+#define M_SFT KC_LSFT
+#define M_ALT KC_LALT
+#define M_GUI KC_LGUI
+#define ZIATILDE S(KC_GRV)
+#define GO_MINE TO(LAYER_MINECRAFT)
+#define K_RPT QK_REPEAT_KEY
+
+// declare custom keycodes from a safe range, this is can be put also in the layout
+enum custom_keycodes {
+    LAYER_SYMBOL_SHIFT = SAFE_RANGE,
+};
+
+// Tap Dance declarations
+enum {
+    SL,
+    SFT
+};
+
+void left_thumb_tap_each(tap_dance_state_t *state, void *user_data) {
+    switch (state->count) {
+        case 1:
+            break;
+        case 2:
+            break;
+        case 3:
+            break;
+        case 4:
+    }
+}
+
+void left_thumb_tap_finished(tap_dance_state_t *state, void *user_data) {
+    switch (state->count) {
+        case 1:
+            add_oneshot_mods(MOD_BIT(KC_LSFT));
+            break;
+        case 2:
+            caps_word_toggle();
+            break;
+        case 3:
+            tap_code16(KC_CAPS);
+            break;
+        default:
+    }
+}
+
+void left_thumb_tap_reset(tap_dance_state_t *state, void *user_data) {
+
+}
+
+void left_pinky_tap_each(tap_dance_state_t *state, void *user_data) {
+    switch (state->count) {
+        case 1:
+            break;
+        case 2:
+            break;
+        case 3:
+            break;
+        case 4:
+    }
+}
+
+void left_pinky_tap_finished(tap_dance_state_t *state, void *user_data) {
+    switch (state->count) {
+        case 1:
+            swap_hands_toggle();
+            break;
+        case 2:
+            layer_move(LAYER_NAVIGATION);
+            break;
+        case 3:
+            tap_code16(KC_CAPS); //TODO
+            break;
+        default:
+    }
+}
+
+void left_pinky_tap_reset(tap_dance_state_t *state, void *user_data) {
+
+}
+
+// Tap Dance definitions
+tap_dance_action_t tap_dance_actions[] = {
+    [SL] = ACTION_TAP_DANCE_FN_ADVANCED(left_thumb_tap_each, left_thumb_tap_finished, left_thumb_tap_reset),
+    [SFT] = ACTION_TAP_DANCE_FN_ADVANCED(left_pinky_tap_each, left_pinky_tap_finished, left_pinky_tap_reset)
+};
+
+enum unicode_names {
+    BANG,
+    IRONY,
+    SNEK,
+    A_ACUTO,
+    A_ACUTO_MAIUSC,
+    A_GRAVE_MINUSC,
+    E_GRAVE_MAIUSC,
+    E_GRAVE_MINUSC,
+    E_ACUTO_MAIUSC,
+    E_ACUTO_MINUSC,
+    I_GRAVE_MAIUSC,
+    I_GRAVE_MINUSC,
+    O_GRAVE_MAIUSC,
+    O_GRAVE_MINUSC,
+    U_GRAVE_MAIUSC,
+    U_GRAVE_MINUSC,
+    EMOJI_LAUGH,
+    EMOJI_ROFL,
+    SLIGHTLY_SMILING_FACE,
+    UPSIDE_DOWN_FACE,
+    RED_HEART,
+    HEART_EXCLAMATION,
+    LOUDLY_CRYING,
+    ANXIOUS_FACE,
+    CHECK_MARK,
+    RED_CROSS,
+    MUSCLE,
+    EXPLOSION,
+    ANGRY,
+    PAROLACCE
+};
+// sus
+#define ACENT_A UP(A_ACUTO, A_ACUTO_MAIUSC)
+#define ACUT_E UP(E_ACUTO_MINUSC, E_ACUTO_MAIUSC)
+#define GRAV_E UP(E_GRAVE_MINUSC, E_GRAVE_MAIUSC)
+#define ACENT_I UP(I_GRAVE_MINUSC, I_GRAVE_MAIUSC)
+#define ACENT_O UP(O_GRAVE_MINUSC, O_GRAVE_MAIUSC)
+#define ACENT_U UP(U_GRAVE_MINUSC, U_GRAVE_MAIUSC)
+#define LAUGH UP(EMOJI_LAUGH, EMOJI_ROFL)
+#define SMILE UP(SLIGHTLY_SMILING_FACE, UPSIDE_DOWN_FACE)
+#define HEART UP(RED_HEART, HEART_EXCLAMATION)
+#define CRY UP(ANXIOUS_FACE, LOUDLY_CRYING)
+#define MARKS UP(CHECK_MARK, RED_CROSS)
+#define BICEPS UP(MUSCLE, EXPLOSION)
+#define ANGER UP(ANGRY, PAROLACCE)
+
+const uint32_t PROGMEM unicode_map[] = {
+    [BANG]  = 0x203D,
+    [IRONY] = 0x2E2E,
+    [SNEK]  = 0x1F40D,
+    [A_ACUTO] = 0x00E0,
+    [A_ACUTO_MAIUSC] = 0x00C0,
+    [A_GRAVE_MINUSC] = 0x00E0,
+    [E_GRAVE_MAIUSC] = 0x00C8,
+    [E_GRAVE_MINUSC] = 0x00E8,
+    [E_ACUTO_MAIUSC] = 0x00C9,
+    [E_ACUTO_MINUSC] = 0x00E9,
+    [I_GRAVE_MAIUSC] = 0x00CC,
+    [I_GRAVE_MINUSC] = 0x00EC,
+    [O_GRAVE_MAIUSC] = 0x00D2,
+    [O_GRAVE_MINUSC] = 0x00F2,
+    [U_GRAVE_MAIUSC] = 0x00D9,
+    [U_GRAVE_MINUSC] = 0x00F9,
+    [EMOJI_LAUGH] = 0x1F602,
+    [EMOJI_ROFL] = 0x1F923,
+    [SLIGHTLY_SMILING_FACE] = 0x1F642,
+    [UPSIDE_DOWN_FACE] = 0x1F643,
+    [RED_HEART] = 0x2764,
+    [HEART_EXCLAMATION] = 0x2763,
+    [LOUDLY_CRYING] = 0x1F62D,
+    [ANXIOUS_FACE] = 0x1F630,
+    [CHECK_MARK] = 0x2705,
+    [RED_CROSS] = 0x274C,
+    [MUSCLE] = 0x1F4AA,
+    [EXPLOSION] = 0x1F4A5,
+    [ANGRY] = 0x1F620,
+    [PAROLACCE] = 0x1F92C,
+};
+
 // clang-format off
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [LAYER_BASE] = LAYOUT_split_3x5_3(
   // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
-          KC_Q,    KC_W,    KC_F,    KC_P,    KC_B,       KC_J,    KC_L,    KC_U,    KC_Y,    KC_P,
+        KC_Q,    KC_W,    KC_F,    KC_P,    KC_B,       KC_J,    KC_L,    KC_U,    KC_Y, TD(SFT),
   // ├─────────────────────────────────────────────┤ ├─────────────────────────────────────────────┤
-          KC_A,    KC_R,    KC_S,    KC_T,    KC_G,       KC_M,    KC_N,    KC_E,    KC_I, KC_O,
+      KCTL_A,  KSFT_R,  KALT_S,  KGUI_T,    KC_G,       KC_M,  KGUI_N,  KALT_E,  KSFT_I,  KCTL_O,
   // ├─────────────────────────────────────────────┤ ├─────────────────────────────────────────────┤
-          KC_Z,    KC_X,    KC_C,    KC_D,    KC_V,       KC_K,    KC_H, KC_COMM,  KC_DOT, KC_SLSH,
+        KC_Z,    L1_X,    L2_C,    L3_D, L_NAV_V,       KC_K,    KC_H, KC_COMM,  KC_DOT,  L4_LSH,
   // ╰─────────────────────────────────────────────┤ ├─────────────────────────────────────────────╯
-                         KC_ESC, KC_SPC,  KC_BSPC,      KC_SPC,  KC_ENT,    KC_A
+                         KC_ESC, KC_SPC,  KC_BSPC,    TD(SL),  KC_ENT,    KC_A //K_RPT
   //                   ╰───────────────────────────╯ ╰──────────────────────────╯
   ),
 
-  [LAYER_NAV] = LAYOUT_split_3x5_3(
+  [LAYER_QWERTY] = LAYOUT_split_3x5_3(
   // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
-        KC_TAB, XXXXXXX, XXXXXXX, XXXXXXX, KC_VOLU,    XXXXXXX, KC_HOME,   KC_UP,  KC_END,  KC_DEL,
-  // ├─────────────────────────────────────────────┤ ├─────────────────────────────────────────────┤
-       KC_LSFT, KC_LCTL, KC_LALT, KC_LGUI, KC_VOLD,    XXXXXXX, KC_LEFT, KC_DOWN, KC_RGHT, KC_BSPC,
-  // ├─────────────────────────────────────────────┤ ├─────────────────────────────────────────────┤
-       QK_BOOT, EE_CLR, KC_MPRV, KC_MNXT, KC_MPLY,    XXXXXXX, KC_PGDN, KC_PGUP, XXXXXXX,  KC_ENT,
-  // ╰─────────────────────────────────────────────┤ ├─────────────────────────────────────────────╯
-                         XXXXXXX, _______, KC_LSFT,     KC_SPC, _______, KC_ESC
+         KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,       KC_Y,    KC_U,    KC_I,    KC_O,    KC_P,
+  // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
+       KCTL_A,  KSFT_S,  KALT_D,  KGUI_F,    KC_G,       KC_H,  KGUI_J,  KALT_K,  KSFT_L,  TD(SFT),
+  // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
+         KC_Z,    L1_X,    L2_C,    L3_V,  L_NAV_B,       KC_N,    KC_M, KC_COMM,  KC_DOT,  L4_LSH,
+  // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
+                         KC_ESC, KC_SPC,  KC_BSPC,    TD(SL),  KC_ENT,    KC_A //K_RPT
   //                   ╰───────────────────────────╯ ╰──────────────────────────╯
   ),
 
-  [LAYER_SYM] = LAYOUT_split_3x5_3(
+  [LAYER_ARROWS] = LAYOUT_split_3x5_3(
   // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
-        KC_ESC, KC_LBRC, KC_LCBR, KC_LPRN, KC_TILD,    KC_CIRC, KC_RPRN, KC_RCBR, KC_RBRC,  KC_GRV,
-  // ├─────────────────────────────────────────────┤ ├─────────────────────────────────────────────┤
-       KC_MINS, KC_ASTR,  KC_EQL, KC_UNDS,  KC_DLR,    KC_HASH, KC_RGUI, KC_RALT, KC_RCTL, KC_RSFT,
-  // ├─────────────────────────────────────────────┤ ├─────────────────────────────────────────────┤
-       KC_PLUS, KC_PIPE,   KC_AT, KC_SLSH, KC_PERC,    KC_SCLN, KC_BSLS, KC_AMPR, KC_QUES, KC_EXLM,
-  // ╰─────────────────────────────────────────────┤ ├─────────────────────────────────────────────╯
-                          KC_ESC, _______, KC_LSFT,     KC_SPC, _______, XXXXXXX
-  //                   ╰───────────────────────────╯ ╰──────────────────────────╯
-  ),
-
-  [LAYER_NUM] = LAYOUT_split_3x5_3(
-  // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
-          KC_1,    KC_2,    KC_3,    KC_4,    KC_5,       KC_6,    KC_7,    KC_8,    KC_9,   KC_0,
-  // ├─────────────────────────────────────────────┤ ├─────────────────────────────────────────────┤
-       KC_LSFT, KC_LCTL, KC_LALT, KC_LGUI,  KC_F11,     KC_F12, KC_RGUI, KC_RALT, KC_RCTL, KC_RSFT,
-  // ├─────────────────────────────────────────────┤ ├─────────────────────────────────────────────┤
          KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,      KC_F6,   KC_F7,   KC_F8,   KC_F9,  KC_F10,
-  // ╰─────────────────────────────────────────────┤ ├─────────────────────────────────────────────╯
-                         XXXXXXX, _______, KC_LSFT,     KC_SPC, _______, XXXXXXX
+  // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
+         M_CTL,   M_SFT,   M_ALT,   M_GUI,  KC_F11,     KC_F12, KC_LEFT, KC_DOWN,   KC_UP, KC_RGHT,
+  // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
+       XXXXXXX, XXXXXXX, XXXXXXX, EE_CLR,  QK_BOOT,    KC_PAST,   KC_P1,   KC_P2,   KC_P3, KC_PSLS,
+  // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
+                           TO(0),_______,   KC_DEL,    _______, _______, _______ //K_AREP
+  //                   ╰───────────────────────────╯ ╰──────────────────────────╯
+  ),
+
+  [LAYER_NUMBERS] = LAYOUT_split_3x5_3(
+  // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
+       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,     KC_DOT,    KC_7,    KC_8,    KC_9, KC_EQL,
+  // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
+         M_CTL,   M_SFT,   M_ALT,   M_GUI, XXXXXXX,    KC_PPLS,    KC_4,    KC_5,    KC_6, KC_MINS,
+  // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
+       XXXXXXX, KC_COLN, XXXXXXX,  KC_DOT, XXXXXXX,    KC_PAST,    KC_1,    KC_2,    KC_3, KC_PSLS,
+  // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
+                           TO(0), _______, _______,    _______,    KC_0, _______
+  //                   ╰───────────────────────────╯ ╰──────────────────────────╯
+  ),
+
+  [LAYER_SYMBOLS] = LAYOUT_split_3x5_3(
+  // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
+       S(KC_1), S(KC_2), S(KC_3), S(KC_4), S(KC_5),    S(KC_6), S(KC_7), S(KC_8),  KC_EQL, KC_SCLN,
+  // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
+         M_CTL,   M_SFT, KC_COLN,   M_GUI, KC_BSLS,    KC_QUOT, S(KC_9), S(KC_0), KC_LBRC, KC_RBRC,
+  // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
+      ZIATILDE, KC_SLSH,  KC_DOT, KC_MINS,  KC_GRV,     L_SYM2,KC_TAB,S(KC_COMM),S(KC_DOT),KC_SLSH,
+  // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
+                           TO(0), _______, _______,    _______, _______, _______
+  //                   ╰───────────────────────────╯ ╰──────────────────────────╯
+  ),
+
+  [LAYER_MOUSE] = LAYOUT_split_3x5_3(
+  // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
+       QK_BOOT, RGB_TOG, DM_PLY1, DM_REC1, XXXXXXX,    XXXXXXX, DM_REC2, DM_PLY2, XXXXXXX, KC_PSCR,
+  // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
+       RGB_MOD, RGB_HUI, RGB_SAI, RGB_VAI, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
+       XXXXXXX, XXXXXXX, XXXXXXX, RGB_SPI, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
+                           TO(0), _______, _______,    _______, _______, _______
+  //                   ╰───────────────────────────╯ ╰──────────────────────────╯
+  ),
+
+  [LAYER_NAVIGATION] = LAYOUT_split_3x5_3(
+  // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
+       XXXXXXX, XXXXXXX, GO_MINE, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX,   TO(7),   TO(8),   TO(9),
+  // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
+       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX,   TO(4),   TO(5),   TO(6),
+  // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
+       XXXXXXX,   TO(1),   TO(2),   TO(3), XXXXXXX,    XXXXXXX, XXXXXXX,   TO(1),   TO(2),   TO(3),
+  // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
+                           TO(0), _______, _______,    _______, _______, _______
+  //                   ╰───────────────────────────╯ ╰──────────────────────────╯
+  ),
+
+  [LAYER_MINECRAFT] = LAYOUT_split_3x5_3(
+  // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
+       KC_LCTL,    KC_Q,    KC_W,    KC_E,    KC_T,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
+       KC_LSFT,    KC_A,    KC_S,    KC_D,    KC_F,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
+       KC_LCTL,   KC_F3,   KC_F4,   KC_F5,    KC_G,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
+                           TO(0), _______, _______,    _______, _______, _______
+  //                   ╰───────────────────────────╯ ╰──────────────────────────╯
+  ),
+
+  [LAYER_ACCENTED_LETTERS] = LAYOUT_split_3x5_3(
+  // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
+       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, ACENT_U, XXXXXXX, XXXXXXX,
+  // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
+       ACENT_A, KC_LSFT, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX,  ACUT_E, ACENT_I, ACENT_O,
+  // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
+       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX,  GRAV_E, XXXXXXX, XXXXXXX,
+  // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
+                           TO(0), _______, _______,    _______, _______, _______
+  //                   ╰───────────────────────────╯ ╰──────────────────────────╯
+  ),
+
+  [LAYER_EMOJI] = LAYOUT_split_3x5_3(
+  // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
+       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
+       XXXXXXX,   ANGER,  BICEPS,   MARKS, XXXXXXX,    XXXXXXX,   LAUGH,   SMILE,   HEART,     CRY,
+  // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
+       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
+                           TO(0), _______, _______,    _______, _______, _______
+  //                   ╰───────────────────────────╯ ╰──────────────────────────╯
+  ),
+
+  [LAYER_SYMBOL_2] = LAYOUT_split_3x5_3(
+  // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
+       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, KC_CIRC, XXXXXXX, XXXXXXX, XXXXXXX,
+  // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
+       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
+       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
+                           TO(0), _______, _______,    _______, _______, _______
   //                   ╰───────────────────────────╯ ╰──────────────────────────╯
   ),
 };
+
+const keypos_t PROGMEM hand_swap_config[MATRIX_ROWS][MATRIX_COLS] = {
+    /* Left hand, matrix positions */
+    {{0, 5}, {1, 5}, {2, 5}, {3, 5}, {4, 5}},
+    {{0, 6}, {1, 6}, {2, 6}, {3, 6}, {4, 6}},
+    {{0, 7}, {1, 7}, {2, 7}, {3, 7}, {4, 7}},
+    {{0, 8}, {1, 8}, {2, 8}, {3, 8}, {4, 8}},
+    /* Right hand, matrix positions */
+    {{0, 0}, {1, 0}, {2, 0}, {3, 0}, {4, 0}},
+    {{0, 1}, {1, 1}, {2, 1}, {3, 1}, {4, 1}},
+    {{0, 2}, {1, 2}, {2, 2}, {3, 2}, {4, 2}},
+    {{0, 3}, {1, 3}, {2, 3}, {3, 3}, {4, 3}},
+};
+
+// BEGIN ALT KEY MAPPINGS
+uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
+    bool shifted = (mods & MOD_MASK_SHIFT);  // Was Shift held?
+    bool controlled = (mods & MOD_MASK_CTRL);  // Was Control held?
+    //bool modded = (mods & MOD_MASK_GUI);  // Was Mod held?
+    //bool alted = (mods & MOD_MASK_ALT);  // Was Alt held?
+
+    switch(keycode) {
+    case KC_U: return C(KC_R);  // 'u' maps Ctrl + r. This is for the vim undo-redo
+    case KC_TAB:
+            if(shifted) {
+                return KC_TAB;
+            } else {
+                return S(KC_TAB);
+            }
+    case KC_R:
+            if(controlled) {
+                return KC_U; // Ctrl+'r' maps to 'u'. This is for the vim undo-redo
+            } else {
+                return KC_TRNS;
+            }
+    case KC_Y:
+        if(controlled) {
+            return C(KC_Z);
+        } else {
+            return KC_TRNS;
+        }
+    case KC_Z:
+        if(controlled) {
+            return C(KC_Y);
+        } else {
+            return KC_TRNS;
+        }
+    case RGB_HUI: return RGB_HUI;  // Increase hue maps to decrease hue
+    case RGB_MOD: return RGB_RMOD;  // Next animation mode maps to previous animation mode
+    case RGB_VAI: return RGB_VAD;  // Increase brightness maps to decrease brightness
+    case RGB_SAI: return RGB_SAD;  // Increase saturation maps to decrease saturation
+    case RGB_SPI: return RGB_SPD;  // Increase animation speed maps to decrease animation speed
+    default: return KC_TRNS;  // Defer to default definitions.
+    }
+}
+// END ALT KEY MAPPINGS
+
+// BEGIN COMBOS
+enum combo_events {
+    COMBO_ACCENTED,
+    COMBO_SYMBOL,
+    COMBO_SYMBOL_SHIFT,
+    COMBO_EMOJI,
+    COMBO_LEADER,
+    COMBO_SWAP_HANDS_RIGHT,
+    COMBO_SWAP_HANDS_LEFT,
+};
+
+const uint16_t PROGMEM accented_letters_combo[] = {KC_H, KC_COMM, COMBO_END};
+const uint16_t PROGMEM symbol_layer_shifted_combo[] = {KC_W, KC_F, COMBO_END};
+const uint16_t PROGMEM symbol_layer_combo[] = {KC_P, KC_F, COMBO_END};
+const uint16_t PROGMEM emoji_layer_combo[] = {KC_J, KC_L, COMBO_END};
+const uint16_t PROGMEM leader_combo[] = {KC_U, KC_Y, COMBO_END};
+const uint16_t PROGMEM swap_hands_right_combo[] = {KC_DOT, KC_COMM, COMBO_END};
+const uint16_t PROGMEM swap_hands_left_combo[] = {L1_X, L2_C, COMBO_END};
+
+combo_t key_combos[] = {
+    [COMBO_ACCENTED] = COMBO(accented_letters_combo, OSL(LAYER_ACCENTED_LETTERS)),
+    [COMBO_SYMBOL] = COMBO(symbol_layer_combo, OSL(LAYER_SYMBOLS)),
+    [COMBO_SYMBOL_SHIFT] = COMBO(symbol_layer_shifted_combo, LAYER_SYMBOL_SHIFT),
+    [COMBO_EMOJI] = COMBO(emoji_layer_combo, TO(LAYER_EMOJI)),
+    [COMBO_LEADER] = COMBO(leader_combo, QK_LEAD),
+    [COMBO_SWAP_HANDS_RIGHT] = COMBO(swap_hands_right_combo, SH_TOGG),
+    [COMBO_SWAP_HANDS_LEFT] = COMBO(swap_hands_left_combo, SH_TOGG),
+};
+// END COMBOS
+
+// BEGIN LEADER KEY
+void leader_start_user(void) {
+    // Do something when the leader key is pressed
+}
+
+void leader_end_user(void) {
+    if(leader_sequence_one_key(KC_S)) {
+        // Leader, s => [S]ave vim
+        SEND_STRING(SS_TAP(X_ESC));
+        SEND_STRING(":w\n");
+    } else if(leader_sequence_one_key(KC_E)) {
+        // Leader, e => [E]xit vim
+        SEND_STRING(SS_TAP(X_ESC));
+        SEND_STRING(":q\n");
+    } else if(leader_sequence_two_keys(KC_A, KC_C)) {
+        // Leader, a, c => Ctrl+A, Ctrl+C
+        SEND_STRING(SS_LCTL("a") SS_LCTL("c"));
+    } else if(leader_sequence_two_keys(KC_S, KC_E)) {
+        // Leader, s, e => [S]ave [E]xit vim
+        SEND_STRING(SS_TAP(X_ESC));
+        SEND_STRING(":wq\n");
+    }
+    // else if (leader_sequence_two_keys(KC_A, KC_S)) {
+        // Leader, a, s => GUI+S
+        // tap_code16(LGUI(KC_S));
+    //}
+}
+// END LEADER KEY
+// BEGIN MACROS
+bool process_record_user(uint16_t keycode, keyrecord_t* record) {
+    if (!process_achordion(keycode, record)) { return false; }
+    // Your macros ...
+    switch(keycode) {
+    case LAYER_SYMBOL_SHIFT: // TODO
+        if (record->event.pressed) {
+            // when keycode VIM_SAVE_EXIT is pressed!
+            //SEND_STRING(SS_TAP(OSM(X_LSFT)));
+            //SEND_STRING(SS_TAP(OSL(LAYER_ACCENTED_LETTERS)));
+        } else {
+            // when keycode VIM_SAVE_EXIT is released!
+        }
+        break;
+    }
+
+    return true;
+}
+// END MACROS
+
+// BEGIN ACHORDION
+bool achordion_chord(uint16_t tap_hold_keycode,
+                     keyrecord_t* tap_hold_record,
+                     uint16_t other_keycode,
+                     keyrecord_t* other_record) {
+    // Exceptionally consider the following chords as holds, even though they
+    // are on the same hand
+    switch(tap_hold_keycode) {
+        case KCTL_A:
+        if(other_keycode == KC_Z
+            || other_keycode == L1_X
+            || other_keycode == L2_C
+            || other_keycode == L3_D
+            || other_keycode == L_NAV_V
+            || other_keycode == L_NAV_B
+            || other_keycode == KGUI_T
+            || other_keycode == KC_F
+        ) { return true; }
+        break;
+        case KSFT_R:
+        if(other_keycode == KC_Z
+            || other_keycode == L1_X
+            || other_keycode == L2_C
+            || other_keycode == L3_D
+            || other_keycode == L_NAV_V
+            || other_keycode == L_NAV_B
+        ) { return true; }
+        break;
+        case KALT_S:
+        if(other_keycode == KC_Z
+            || other_keycode == L1_X
+            || other_keycode == L2_C
+            || other_keycode == L3_D
+            || other_keycode == L_NAV_V
+            || other_keycode == L_NAV_B
+        ) { return true; }
+        break;
+        case KGUI_T:
+        if(other_keycode == KC_Z
+            || other_keycode == L1_X
+            || other_keycode == L2_C
+            || other_keycode == L3_D
+            || other_keycode == L_NAV_V
+            || other_keycode == L_NAV_B
+            || other_keycode == KC_P
+            || other_keycode == KC_W
+            || other_keycode == KC_F
+        ) { return true; }
+        break;
+        case KGUI_N:
+        if(other_keycode == KC_K
+            || other_keycode == KC_H
+            || other_keycode == KC_COMM
+            || other_keycode == KC_DOT
+            || other_keycode == L4_LSH
+            || other_keycode == KC_ENT
+        ) { return true; }
+        break;
+        case KALT_E:
+        if(other_keycode == KC_K
+            || other_keycode == KC_H
+            || other_keycode == KC_COMM
+            || other_keycode == KC_DOT
+            || other_keycode == L4_LSH
+        ) { return true; }
+        break;
+        //case KSFT_I:
+        //break;
+        case KCTL_O:
+        if(other_keycode == KC_K
+            || other_keycode == KC_H
+            || other_keycode == KC_COMM
+            || other_keycode == KC_DOT
+            || other_keycode == L4_LSH
+        ) {
+            return true;
+        } else if(other_keycode == KC_F) {
+            return false;
+        }
+        break;
+        case L1_X:
+        return true;
+        case L2_C:
+        return true;
+        case L3_D:
+        return true;
+        case L_NAV_V: // this case is the layer navigation and GO_MINE for the COLEMAK base layer
+        if(other_keycode == KC_F) {
+            return true;
+        } else {
+            return false;
+        }
+        case L_NAV_B: // this case is the layer navigation and GO_MINE for the QWERTY base layer
+        if(other_keycode == KC_E) {
+            return true;
+        } else {
+            return false;
+        }
+        case L4_LSH:
+        return true;
+    }
+
+    // Also allow same-hand holds when the other key is in the rows below the
+    // alphas. I need the `% (MATRIX_ROWS / 2)` because my keyboard is split.
+    //if (other_record->event.key.row % (MATRIX_ROWS / 2) >= 4) { return true; }
+
+    // Otherwise, follow the opposite hands rule.
+    return achordion_opposite_hands(tap_hold_record, other_record);
+}
+
+void matrix_scan_user(void) {
+    achordion_task();
+}
+
+uint16_t achordion_streak_timeout(uint16_t tap_hold_keycode) {
+    if(IS_QK_LAYER_TAP(tap_hold_keycode)) {
+        return 0;  // Disable streak detection on layer-tap keys.
+    }
+
+    switch(tap_hold_keycode) {
+    case L1_X:
+    case L2_C:
+    case L3_D:
+        return 70;
+    }
+
+    return 240;  // Default of 100 ms.
+}
+// END ACHORDION
+// BEGIN TAPPING_TERM_PER_KEY
+uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
+    switch (keycode) {
+        case TD(SL):
+            return 500;
+        default:
+            return TAPPING_TERM;
+    }
+}
+// END TAPPING_TERM_PER_KEY
 // clang-format on
