@@ -32,6 +32,7 @@
 #define LEADER_PER_KEY_TIMING
 #define LEADER_TIMEOUT 300
 #define COMBO_TERM 40
+// Kimo add END
 
 // To use the handedness pin, resistors need to be installed on the adapter PCB.
 // If so, uncomment the following code, and undefine MASTER_RIGHT above.
