@@ -33,8 +33,8 @@ enum charybdis_keymap_layers {
     LAYER_MOUSE,
     LAYER_NAVIGATION,
     LAYER_MINECRAFT,
-    LAYER_EMOJI,
     LAYER_ACCENTED_LETTERS,
+    LAYER_EMOJI,
     LAYER_SYMBOL_2
 };
 
@@ -66,6 +66,9 @@ enum charybdis_keymap_layers {
 #define L1_X LT(LAYER_ARROWS,KC_X)
 #define L2_C LT(LAYER_NUMBERS,KC_C)
 #define L3_D LT(LAYER_SYMBOLS,KC_D)
+#define L_NAV_V LT(LAYER_NAVIGATION,KC_V)
+#define L_NAV_B LT(LAYER_NAVIGATION,KC_B)
+#define K_NAV TO(LAYER_NAVIGATION)
 // define qwerty alternative
 #define L3_V LT(LAYER_SYMBOLS,KC_V)
 #define L_SYM2 TO(LAYER_SYMBOL_2)
@@ -243,13 +246,13 @@ const uint32_t PROGMEM unicode_map[] = {
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   [LAYER_BASE] = LAYOUT(
   // ╭──────────────────────────────────────────────────────╮ ╭──────────────────────────────────────────────────────╮
-       QWERTY, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,   TO(5),
+       QWERTY, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
       XXXXXXX,    KC_Q,    KC_W,    KC_F,    KC_P,    KC_B,       KC_J,    KC_L,    KC_U,    KC_Y, TD(SFT), XXXXXXX,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
       XXXXXXX,  KCTL_A,  KSFT_R,  KALT_S,  KGUI_T,    KC_G,       KC_M,  KGUI_N,  KALT_E,  KSFT_I,  KCTL_O, XXXXXXX,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-      XXXXXXX,    KC_Z,    L1_X,    L2_C,    L3_D,    KC_V,       KC_K,    KC_H, KC_COMM,  KC_DOT,  L4_LSH, XXXXXXX,
+      XXXXXXX,    KC_Z,    L1_X,    L2_C,    L3_D, L_NAV_V,       KC_K,    KC_H, KC_COMM,  KC_DOT,  L4_LSH, XXXXXXX,
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
                                    KC_SPC,KC_BSPC, XXXXXXX,      TD(SL),  KC_ENT,
                                            KC_ESC, XXXXXXX,       K_RPT
@@ -258,13 +261,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [LAYER_QWERTY] = LAYOUT(
   // ╭──────────────────────────────────────────────────────╮ ╭──────────────────────────────────────────────────────╮
-      COLEMAK, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,   TO(5),
+      COLEMAK, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
       XXXXXXX,    KC_Q,    KC_W,    KC_E,    KC_R,    KC_T,       KC_Y,    KC_U,    KC_I,    KC_O,    KC_P, XXXXXXX,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
       XXXXXXX,  KCTL_A,  KSFT_S,  KALT_D,  KGUI_F,    KC_G,       KC_H,  KGUI_J,  KALT_K,  KSFT_L,  TD(SFT),XXXXXXX,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-      XXXXXXX,    KC_Z,    L1_X,    L2_C,    L3_V,    KC_B,       KC_N,    KC_M, KC_COMM,  KC_DOT,  L4_LSH, XXXXXXX,
+      XXXXXXX,    KC_Z,    L1_X,    L2_C,    L3_V,  L_NAV_B,       KC_N,    KC_M, KC_COMM,  KC_DOT,  L4_LSH, XXXXXXX,
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
                                    KC_SPC,KC_BSPC, XXXXXXX,      TD(SL),  KC_ENT,
                                            KC_ESC, XXXXXXX,       K_RPT
@@ -339,7 +342,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX,   TO(4),   TO(5),   TO(6), XXXXXXX,
   // ├──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────┤
-       XXXXXXX, XXXXXXX,   TO(1),   TO(2),   TO(3),   TO(5),    XXXXXXX, XXXXXXX,   TO(1),   TO(2),   TO(3), XXXXXXX,
+       XXXXXXX, XXXXXXX,   TO(1),   TO(2),   TO(3), XXXXXXX,    XXXXXXX, XXXXXXX,   TO(1),   TO(2),   TO(3), XXXXXXX,
   // ╰──────────────────────────────────────────────────────┤ ├──────────────────────────────────────────────────────╯
                                   _______, _______, _______,    _______,   TO(0),
                                              TO(0), _______,    _______
@@ -549,7 +552,7 @@ bool achordion_chord(uint16_t tap_hold_keycode,
                      uint16_t other_keycode,
                      keyrecord_t* other_record) {
     // Exceptionally consider the following chords as holds, even though they
-    // are on the same hand in Dvorak.
+    // are on the same hand
     switch(tap_hold_keycode) {
         case KCTL_A:
         if(other_keycode == KC_Z
@@ -625,6 +628,18 @@ bool achordion_chord(uint16_t tap_hold_keycode,
         return true;
         case L3_D:
         return true;
+        case L_NAV_V: // this case is the layer navigation and GO_MINE for the COLEMAK base layer
+        if(other_keycode == KC_F) {
+            return true;
+        } else {
+            return false;
+        }
+        case L_NAV_B: // this case is the layer navigation and GO_MINE for the QWERTY base layer
+        if(other_keycode == KC_E) {
+            return true;
+        } else {
+            return false;
+        }
         case L4_LSH:
         return true;
     }
