@@ -310,7 +310,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
   [LAYER_NAVIGATION] = LAYOUT_split_3x5_3(
   // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
-       XXXXXXX, XXXXXXX, GO_MINE, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX,   TO(7),   TO(8),   TO(9),
+       COLEMAK,  QWERTY, GO_MINE, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX,   TO(7),   TO(8),   TO(9),
   // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
        XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,    XXXXXXX, XXXXXXX,   TO(4),   TO(5),   TO(6),
   // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
