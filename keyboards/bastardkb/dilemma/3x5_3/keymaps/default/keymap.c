@@ -67,6 +67,7 @@ enum dilemma_keymap_layers {
 #define L3_V LT(LAYER_SYMBOLS,KC_V)
 #define L_SYM2 TO(LAYER_SYMBOL_2)
 #define L4_LSH LT(LAYER_MOUSE,KC_SLSH)
+#define MOUSE_Z LT(LAYER_MOUSE,KC_Z)
 #define M_CTL KC_LCTL
 #define M_SFT KC_LSFT
 #define M_ALT KC_LALT
@@ -242,7 +243,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ├─────────────────────────────────────────────┤ ├─────────────────────────────────────────────┤
       KCTL_A,  KSFT_R,  KALT_S,  KGUI_T,    KC_G,       KC_M,  KGUI_N,  KALT_E,  KSFT_I,  KCTL_O,
   // ├─────────────────────────────────────────────┤ ├─────────────────────────────────────────────┤
-        KC_Z,    L1_X,    L2_C,    L3_D, L_NAV_V,       KC_K,    KC_H, KC_COMM,  KC_DOT,  L4_LSH,
+     MOUSE_Z,    L1_X,    L2_C,    L3_D, L_NAV_V,       KC_K,    KC_H, KC_COMM,  KC_DOT,  L4_LSH,
   // ╰─────────────────────────────────────────────┤ ├─────────────────────────────────────────────╯
                          KC_ESC, KC_SPC,  KC_BSPC,    TD(SL),  KC_ENT,    KC_A //K_RPT
   //                   ╰───────────────────────────╯ ╰──────────────────────────╯
@@ -300,11 +301,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
        QK_BOOT, RGB_TOG, DM_PLY1, DM_REC1, XXXXXXX,    XXXXXXX, DM_REC2, DM_PLY2, XXXXXXX, KC_PSCR,
   // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
-       RGB_MOD, RGB_HUI, RGB_SAI, RGB_VAI, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+       RGB_MOD, RGB_HUI, RGB_SAI, RGB_VAI, RGB_SPI,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
   // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
-       XXXXXXX, XXXXXXX, XXXXXXX, RGB_SPI, XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
-  // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
-                           TO(0), _______, _______,    _______, _______, _______
+       XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,  XXXXXXX,    XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX, XXXXXXX,
+  // ╭────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
+                           TO(0), KC_BTN1, KC_BTN2,    _______, _______, _______
   //                   ╰───────────────────────────╯ ╰──────────────────────────╯
   ),
 
@@ -405,11 +406,11 @@ uint16_t get_alt_repeat_key_keycode_user(uint16_t keycode, uint8_t mods) {
             }
     case KC_Y:
         if(controlled) {
-            return C(KC_Z);
+            return C(MOUSE_Z);
         } else {
             return KC_TRNS;
         }
-    case KC_Z:
+    case MOUSE_Z:
         if(controlled) {
             return C(KC_Y);
         } else {
@@ -512,7 +513,7 @@ bool achordion_chord(uint16_t tap_hold_keycode,
     // are on the same hand
     switch(tap_hold_keycode) {
         case KCTL_A:
-        if(other_keycode == KC_Z
+        if(other_keycode == MOUSE_Z
             || other_keycode == L1_X
             || other_keycode == L2_C
             || other_keycode == L3_D
@@ -523,7 +524,7 @@ bool achordion_chord(uint16_t tap_hold_keycode,
         ) { return true; }
         break;
         case KSFT_R:
-        if(other_keycode == KC_Z
+        if(other_keycode == MOUSE_Z
             || other_keycode == L1_X
             || other_keycode == L2_C
             || other_keycode == L3_D
@@ -532,7 +533,7 @@ bool achordion_chord(uint16_t tap_hold_keycode,
         ) { return true; }
         break;
         case KALT_S:
-        if(other_keycode == KC_Z
+        if(other_keycode == MOUSE_Z
             || other_keycode == L1_X
             || other_keycode == L2_C
             || other_keycode == L3_D
@@ -541,7 +542,7 @@ bool achordion_chord(uint16_t tap_hold_keycode,
         ) { return true; }
         break;
         case KGUI_T:
-        if(other_keycode == KC_Z
+        if(other_keycode == MOUSE_Z
             || other_keycode == L1_X
             || other_keycode == L2_C
             || other_keycode == L3_D
@@ -569,6 +570,12 @@ bool achordion_chord(uint16_t tap_hold_keycode,
             || other_keycode == L4_LSH
         ) { return true; }
         break;
+        case MOUSE_Z:
+        if(other_keycode == KC_BTN1
+            || other_keycode == KC_BTN2
+        ) { return true; }
+        break;
+
         //case KSFT_I:
         //break;
         case KCTL_O:
@@ -626,6 +633,8 @@ uint16_t achordion_streak_timeout(uint16_t tap_hold_keycode) {
     case L1_X:
     case L2_C:
     case L3_D:
+        return 70;
+    case MOUSE_Z:
         return 70;
     }
 
