@@ -74,7 +74,7 @@ enum dilemma_keymap_layers {
 #define M_GUI KC_LGUI
 #define ZIATILDE S(KC_GRV)
 #define GO_MINE TO(LAYER_MINECRAFT)
-#define K_RPT QK_REPEAT_KEY
+#define K_PREFIX C(KC_B)  // Ctrl+B: tmux/herdr prefix
 
 // declare custom keycodes from a safe range, this is can be put also in the layout
 enum custom_keycodes {
@@ -245,7 +245,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ├─────────────────────────────────────────────┤ ├─────────────────────────────────────────────┤
      MOUSE_Z,    L1_X,    L2_C,    L3_D, L_NAV_V,       KC_K,    KC_H, KC_COMM,  KC_DOT,  L4_LSH,
   // ╰─────────────────────────────────────────────┤ ├─────────────────────────────────────────────╯
-                         KC_ESC, KC_SPC,  KC_BSPC,    TD(SL),  KC_ENT,    K_RPT
+                         KC_ESC, KC_SPC,  KC_BSPC,    TD(SL),  KC_ENT, K_PREFIX
   //                   ╰───────────────────────────╯ ╰──────────────────────────╯
   ),
 
@@ -257,7 +257,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
          KC_Z,    L1_X,    L2_C,    L3_V,  L_NAV_B,       KC_N,    KC_M, KC_COMM,  KC_DOT,  L4_LSH,
   // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
-                         KC_ESC, KC_SPC,  KC_BSPC,    TD(SL),  KC_ENT,    K_RPT
+                         KC_ESC, KC_SPC,  KC_BSPC,    TD(SL),  KC_ENT, K_PREFIX
   //                   ╰───────────────────────────╯ ╰──────────────────────────╯
   ),
 
