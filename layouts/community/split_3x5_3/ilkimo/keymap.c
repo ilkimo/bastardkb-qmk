@@ -87,7 +87,7 @@ enum custom_keycodes {
 // (see achordion_streak_timeout below); this one is deliberately separate
 // because it answers a different question -- not "was that roll accidental"
 // but "am I still typing rather than reaching for tmux".
-#define REP_PREFIX_TYPING_TERM 500
+#define REP_PREFIX_TYPING_TERM 400
 
 // Tap Dance declarations
 enum {
