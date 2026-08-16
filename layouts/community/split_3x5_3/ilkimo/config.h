@@ -29,3 +29,15 @@
 
 /* Combos. */
 #define COMBO_TERM 40
+
+/* Push layer_state / default_layer_state to the slave half.
+ *
+ * The Dilemma's keyboard.json only syncs matrix_state, so without this the
+ * slave never learns which layer is active: its layer_state stays at the
+ * power-on value, and the per-layer RGB indicators in keymap.c light up on the
+ * master half only. Both halves render their own LEDs, but only the master
+ * runs the keymap.
+ *
+ * Kept here rather than in the keyboard's keyboard.json so an upstream sync
+ * cannot silently revert it. */
+#define SPLIT_LAYER_STATE_ENABLE

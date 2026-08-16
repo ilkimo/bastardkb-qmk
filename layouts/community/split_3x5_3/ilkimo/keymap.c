@@ -774,6 +774,50 @@ bool shutdown_user(bool jump_to_bootloader) {
     rgb_matrix_update_pwm_buffers();
     return false;  // Skip the keyboard-level handler.
 }
+
+// Paint by hue at the *configured* brightness rather than as raw RGB. Going
+// through rgb_matrix_get_val() matters for two reasons: rgb_matrix_set_color()
+// bypasses RGB_MATRIX_MAXIMUM_BRIGHTNESS (176 here), so hardcoded 0xFF channels
+// would both outdraw every animation the board ships with and ignore RM_VALD.
+// This way a layer colour is exactly as bright as a solid-colour animation.
+static void rgb_layer_paint(uint8_t led_min, uint8_t led_max, uint8_t hue) {
+    const hsv_t hsv = {hue, 255, rgb_matrix_get_val()};
+    const rgb_t rgb = hsv_to_rgb(hsv);
+    // led_min/led_max are the slice of LEDs this frame is allowed to touch;
+    // RGB_MATRIX_LED_PROCESS_LIMIT can split a frame across several calls, so
+    // painting outside the range would be overwritten anyway.
+    for (uint8_t i = led_min; i < led_max; i++) {
+        rgb_matrix_set_color(i, rgb.r, rgb.g, rgb.b);
+    }
+}
+
+// Layer colours. Deliberately an *indicator* rather than a layer_state_set_user()
+// hook that calls rgb_matrix_sethsv(), for two reasons:
+//
+//  1. This runs inside the render loop, which is skipped entirely while the LEDs
+//     are toggled off -- rgb_current_effect is forced to 0 in that case
+//     (rgb_matrix.c:324) and the `if (effect)` guard at rgb_matrix.c:422 stops
+//     indicators from being called at all. So layer switches stay silent when
+//     the lights are off, and during USB suspend, with no check of my own.
+//  2. sethsv() would permanently overwrite the saved hue, so toggling the LEDs
+//     back on would show the last layer's colour instead of the one I picked.
+//
+// Only the layers I can get *stuck* on are coloured: the TO() and DF() ones,
+// where landing there without noticing is the actual failure mode. Momentary
+// LT() layers are left alone so the normal animation keeps running.
+bool rgb_matrix_indicators_advanced_user(uint8_t led_min, uint8_t led_max) {
+    // default_layer_state is OR'd in because QWERTY is a DF() layer and would
+    // otherwise never show up in layer_state.
+    switch (get_highest_layer(layer_state | default_layer_state)) {
+        case LAYER_QWERTY:     rgb_layer_paint(led_min, led_max,  21); break;  // orange
+        case LAYER_NAVIGATION: rgb_layer_paint(led_min, led_max,  85); break;  // green
+        case LAYER_MINECRAFT:  rgb_layer_paint(led_min, led_max, 191); break;  // purple
+        case LAYER_EMOJI:      rgb_layer_paint(led_min, led_max, 128); break;  // cyan
+        case LAYER_SYMBOL_2:   rgb_layer_paint(led_min, led_max,  43); break;  // yellow
+        default: break;  // Base and the momentary layers keep the animation.
+    }
+    return false;
+}
 #endif // RGB_MATRIX_ENABLE
 // END RGB INDICATORS
 // clang-format on
