@@ -752,9 +752,22 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
 // The explicit flush matters: rgb_matrix_set_color_all() only stages the colour
 // in the buffer, and the task loop that would normally push it out never gets
 // another turn.
+//
+// Keep the level LOW. rgb_matrix_set_color_all() writes straight to the driver
+// (rgb_matrix.c:179-186) and bypasses RGB_MATRIX_MAXIMUM_BRIGHTNESS, so a full
+// 0xFF red is roughly 20 mA x 72 LEDs = ~1.4 A, well past what the USB port
+// budgets -- and the same latching that makes this work means nothing is left
+// running to turn it down before the next boot.
+//
+// Careful when changing this hook: it can never be validated by the flash that
+// installs it, because it runs from the firmware being *replaced*. Enter the
+// bootloader with bootmagic (hold a key while plugging in) to install a change
+// to it without the previous version executing first.
+#define SHUTDOWN_LED_LEVEL 0x20
+
 bool shutdown_user(bool jump_to_bootloader) {
     if (jump_to_bootloader) {
-        rgb_matrix_set_color_all(RGB_RED);
+        rgb_matrix_set_color_all(SHUTDOWN_LED_LEVEL, 0x00, 0x00);
     } else {
         rgb_matrix_set_color_all(RGB_OFF);
     }
