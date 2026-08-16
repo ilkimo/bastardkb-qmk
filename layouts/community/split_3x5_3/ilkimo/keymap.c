@@ -739,4 +739,28 @@ uint16_t get_tapping_term(uint16_t keycode, keyrecord_t *record) {
     }
 }
 // END TAPPING_TERM_PER_KEY
+// BEGIN RGB INDICATORS
+#ifdef RGB_MATRIX_ENABLE
+// Go red on the way into the bootloader, so "the board is waiting to be
+// flashed" is visible at a glance rather than something I have to remember.
+//
+// This is the only way to light up the bootloader: once bootloader_jump() runs
+// there is no firmware left to drive the LEDs. It works because shutdown_quantum()
+// (quantum.c:208) calls this hook *before* jumping, and WS2812s latch their last
+// value for as long as they stay powered -- so the red survives the flash.
+//
+// The explicit flush matters: rgb_matrix_set_color_all() only stages the colour
+// in the buffer, and the task loop that would normally push it out never gets
+// another turn.
+bool shutdown_user(bool jump_to_bootloader) {
+    if (jump_to_bootloader) {
+        rgb_matrix_set_color_all(RGB_RED);
+    } else {
+        rgb_matrix_set_color_all(RGB_OFF);
+    }
+    rgb_matrix_update_pwm_buffers();
+    return false;  // Skip the keyboard-level handler.
+}
+#endif // RGB_MATRIX_ENABLE
+// END RGB INDICATORS
 // clang-format on
