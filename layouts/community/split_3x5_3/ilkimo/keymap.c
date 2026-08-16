@@ -74,12 +74,20 @@ enum dilemma_keymap_layers {
 #define M_GUI KC_LGUI
 #define ZIATILDE S(KC_GRV)
 #define GO_MINE TO(LAYER_MINECRAFT)
-#define K_PREFIX C(KC_B)  // Ctrl+B: tmux/herdr prefix
 
 // declare custom keycodes from a safe range, this is can be put also in the layout
 enum custom_keycodes {
     LAYER_SYMBOL_SHIFT = SAFE_RANGE,
+    REP_PREFIX,  // Repeat mid-burst, Ctrl+B (tmux/herdr prefix) after a pause
 };
+
+// This define helps to distinguish between the REPEAT key and
+// tmux/herdr Ctrl-b on the right thumb cluster.
+// Achordion has its own, much shorter, notion of a typing streak
+// (see achordion_streak_timeout below); this one is deliberately separate
+// because it answers a different question -- not "was that roll accidental"
+// but "am I still typing rather than reaching for tmux".
+#define REP_PREFIX_TYPING_TERM 500
 
 // Tap Dance declarations
 enum {
@@ -245,7 +253,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ├─────────────────────────────────────────────┤ ├─────────────────────────────────────────────┤
      MOUSE_Z,    L1_X,    L2_C,    L3_D, L_NAV_V,       KC_K,    KC_H, KC_COMM,  KC_DOT,  L4_LSH,
   // ╰─────────────────────────────────────────────┤ ├─────────────────────────────────────────────╯
-                         KC_ESC, KC_SPC,  KC_BSPC,    TD(SL),  KC_ENT, K_PREFIX
+                         KC_ESC, KC_SPC,  KC_BSPC,    TD(SL),  KC_ENT, REP_PREFIX
   //                   ╰───────────────────────────╯ ╰──────────────────────────╯
   ),
 
@@ -257,7 +265,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
   // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
          KC_Z,    L1_X,    L2_C,    L3_V,  L_NAV_B,       KC_N,    KC_M, KC_COMM,  KC_DOT,  L4_LSH,
   // ╭─────────────────────────────────────────────╮ ╭─────────────────────────────────────────────╮
-                         KC_ESC, KC_SPC,  KC_BSPC,    TD(SL),  KC_ENT, K_PREFIX
+                         KC_ESC, KC_SPC,  KC_BSPC,    TD(SL),  KC_ENT, REP_PREFIX
   //                   ╰───────────────────────────╯ ╰──────────────────────────╯
   ),
 
@@ -484,9 +492,82 @@ void leader_end_user(void) {
     //}
 }
 // END LEADER KEY
+// BEGIN FAST TYPING PREFIX
+// REP_PREFIX does double duty on the right thumb: while I am still typing it
+// acts as the Repeat Key, and once I have paused it sends Ctrl+B for tmux.
+static uint16_t rep_prefix_last_input = 0;
+static bool     rep_prefix_typing     = false;
+// Latched at press time so the release matches the press. Without this a
+// press that repeats, held past REP_PREFIX_TYPING_TERM, would release down the
+// Ctrl+B branch and leave the repeated key stuck down.
+static bool rep_prefix_repeating = false;
+// The last key I actually pressed, ignoring the synthetic records that
+// repeat_key_invoke() generates. This is what lets a repeat run survive a
+// pause: see rep_prefix_continues_run().
+static uint16_t rep_prefix_last_keycode = KC_NO;
+
+// Is this press continuing a repeat run that is already under way?
+//
+// Only REP_PREFIX needs checking here. A real QK_REP / QK_AREP key could never
+// show up in rep_prefix_last_keycode anyway: process_repeat_key() returns false
+// for both (quantum.c:343), which short-circuits the chain before
+// process_record_user() is ever reached.
+//
+// The rep_prefix_repeating term is what keeps a plain Ctrl+B from starting a
+// run. Without it, tapping the thumb key twice after a pause would send Ctrl+B
+// and then repeat, instead of the two Ctrl+B presses that nested tmux wants.
+static bool rep_prefix_continues_run(void) {
+    return rep_prefix_last_keycode == REP_PREFIX && rep_prefix_repeating;
+}
+
+// Keep REP_PREFIX itself out of the Repeat Key's history, otherwise repeating
+// would just repeat the prefix. This matters because process_last_key() runs
+// before process_record_user(), so by the time we see the key the repeat
+// feature has already recorded it.
+bool remember_last_key_user(uint16_t keycode, keyrecord_t* record, uint8_t* remembered_mods) {
+    return keycode != REP_PREFIX;
+}
+// END FAST TYPING PREFIX
 // BEGIN MACROS
 bool process_record_user(uint16_t keycode, keyrecord_t* record) {
     if (!process_achordion(keycode, record)) { return false; }
+
+    if (keycode == REP_PREFIX) {
+        if (record->event.pressed) {
+            // Repeat if I am still mid-burst, or if a repeat run is already
+            // going. The second term is what lets me pause: once the run has
+            // started, only pressing some other key ends it.
+            rep_prefix_repeating = rep_prefix_typing || rep_prefix_continues_run();
+        }
+        if (rep_prefix_repeating) {
+            // Mirrors process_repeat_key(): invoked on both press and release
+            // so the repeated key registers and unregisters properly.
+            repeat_key_invoke(&record->event);
+        } else if (record->event.pressed) {
+            tap_code16(C(KC_B));
+        }
+        if (record->event.pressed) {
+            // Deliberately not touching rep_prefix_typing on the Ctrl+B branch:
+            // marking it as typing would make a second tap repeat rather than
+            // send another Ctrl+B.
+            rep_prefix_last_keycode = REP_PREFIX;
+            if (rep_prefix_repeating) {
+                rep_prefix_last_input = timer_read();
+            }
+        }
+        return false;
+    }
+
+    // Any other key press ends a repeat run and restarts the burst window.
+    // Skip the synthetic records repeat_key_invoke() plumbs back through here:
+    // they carry a nonzero repeat count, and letting the repeated letter land
+    // in rep_prefix_last_keycode would look like the key that broke the run.
+    if (record->event.pressed && get_repeat_key_count() == 0) {
+        rep_prefix_last_keycode = keycode;
+        rep_prefix_last_input   = timer_read();
+        rep_prefix_typing       = true;
+    }
+
     // Your macros ...
     switch(keycode) {
     case LAYER_SYMBOL_SHIFT: // TODO
@@ -622,6 +703,13 @@ bool achordion_chord(uint16_t tap_hold_keycode,
 
 void matrix_scan_user(void) {
     achordion_task();
+
+    // Expire the burst here rather than comparing timestamps at press time:
+    // timer_elapsed() is 16-bit and wraps after ~65 s, so an idle period
+    // longer than that would otherwise read as "just typed".
+    if (rep_prefix_typing && timer_elapsed(rep_prefix_last_input) > REP_PREFIX_TYPING_TERM) {
+        rep_prefix_typing = false;
+    }
 }
 
 uint16_t achordion_streak_timeout(uint16_t tap_hold_keycode) {
